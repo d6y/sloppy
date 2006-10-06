@@ -1,0 +1,111 @@
+
+<project name="sloppy" default="release" basedir="../">
+
+<target name="init" description="Set up properties for the build">
+	<property description="Path to the Jar containing JNLP" 
+		name="jnlp.lib" 
+		value="/Applications/Utilities/Java/Java Web Start.app/Contents/MacOS/javaws.jar" />
+</target>
+	
+<!-- Build a new release of Sloppy -->
+<target name="release" depends="compile,jar,sign,src" />
+
+<!-- Increment the build number and compile the source code -->
+<target name="compile" depends="init">
+
+	<tstamp/>
+	
+	<property name="build.file" value="src/com/dallaway/sloppy/resources/build.properties" />
+	
+	<!-- Incremement the build number -->
+	<propertyfile
+    	file="${build.file}"
+    	comment="Sloppy build number" >
+		<entry key="build.number" default="1" type="int" operation="+"/>
+	</propertyfile>
+	
+	<!-- Read the build number -->
+	<property file="${build.file}"/>
+	
+	<javac
+		srcdir="src"
+		destdir="bin" 
+		deprecation="true" >
+		
+		<classpath>
+			<pathelement location="devlib/jnlp.jar" />
+			<pathelement location="devlib/junit.jar" />
+		</classpath>
+		
+	</javac>
+	
+	<echo>Compile for build ${build.number} done</echo>
+
+</target>
+
+<!-- Construct a JAR containng Sloppy -->
+<target name="jar">
+
+	<delete file="sloppy.jar"/>
+	
+	<!-- Build the Jar, using the build.properties from the src
+	     folder not the binary folder, because if there is one
+	     in the bin folder it'll probably out of date -->
+	<jar 
+		jarfile="sloppy.jar" 
+		basedir="bin/" 
+		manifest="etc/manifest" 
+		excludes="com/dallaway/sloppy/resources/build.properties">
+		
+		<fileset dir="." includes="license.txt,graphics_license.txt,readme.txt"/>
+		<fileset dir="src" includes="com/dallaway/sloppy/resources/build.properties"/>
+
+	</jar>	
+
+</target>
+
+
+<!-- Build the javadoc -->
+<target name="javadoc">
+
+	<mkdir dir="apidoc"/>
+	
+	<javadoc
+		sourcepath="src"
+		destdir="apidoc"		
+		packagenames="com.dallaway.sloppy.*"
+		author="true"
+		version="true"
+		>
+		<classpath>
+			<pathelement location="devlib/jnlp.jar" />
+			<pathelement location="devlib/junit.jar" />
+		</classpath>
+	</javadoc>
+
+
+</target>
+
+<!-- Create a jar containing the source code -->
+<target name="src" depends="javadoc">
+
+	<delete file="src.jar"/>
+	
+	<jar 
+		jarfile="src.jar" 
+		>
+		
+		<fileset dir="." includes="src/**,apidoc/**,license.txt,graphics_license.txt,readme.txt,starthere.txt,changes.txt"/>
+		
+	</jar>	
+
+</target>
+
+<!-- Sign the JAR 
+-->
+<target name="sign">
+	<signjar keystore="keystore"
+		jar="sloppy.jar" alias="${key.alias}" storepass="${key.password}"/>
+</target>
+
+</project>
