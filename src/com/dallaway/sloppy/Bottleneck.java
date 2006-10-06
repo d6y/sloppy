@@ -34,8 +34,8 @@ import java.util.Hashtable;
  * time, and we want to limit overall bandwidth, not just the bandwidth
  * used on each request.
  * 
- * @author		$Author: richard $
- * @version	$Revision: 1.5 $ $Date: 2002/05/23 08:05:33 $
+ * @author		$Author$
+ * @version	$Revision$ $Date$
  */
 public class Bottleneck
 {

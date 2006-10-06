@@ -32,8 +32,8 @@ import java.net.Socket;
  * The proxy can be configured via a properties file.  
  * See default.properties for a sample.
  *
- * @author		$Author: richard $
- * @version	$Revision: 1.8 $ $Date: 2002/05/23 08:05:33 $
+ * @author		$Author$
+ * @version	$Revision$ $Date$
  */
 public class SloppyServer implements Runnable
 {

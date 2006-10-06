@@ -33,8 +33,8 @@ package com.dallaway.sloppy;
  * until they have effectively unlimited bandwidth.  So we reset
  * bytes and total time if the user goes quite for 5 seconds or longer.
  * 
- * @author		$Author: richard $
- * @version	$Revision: 1.4 $ $Date: 2002/05/23 08:05:33 $
+ * @author		$Author$
+ * @version	$Revision$ $Date$
  */
 public class Usage
 {

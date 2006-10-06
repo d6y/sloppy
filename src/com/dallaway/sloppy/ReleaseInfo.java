@@ -26,8 +26,8 @@ import java.util.Properties;
 /**
  * The sloppy project release information.
  * 
- * @author	$Author: richard $
- * @version $Revision: 1.7 $ $Date: 2002/06/28 20:53:31 $
+ * @author	$Author$
+ * @version $Revision$ $Date$
  */
 public class ReleaseInfo
 {

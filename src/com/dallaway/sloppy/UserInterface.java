@@ -27,8 +27,8 @@ package com.dallaway.sloppy;
  * in particular the messages are likely to become keys for
  * lookup of the appropriate message.
  * 
- * @author	$Author: richard $
- * @version $Revision: 1.5 $ $Date: 2004/06/07 18:00:51 $
+ * @author	$Author$
+ * @version $Revision$ $Date$
  */
 public interface UserInterface
 {

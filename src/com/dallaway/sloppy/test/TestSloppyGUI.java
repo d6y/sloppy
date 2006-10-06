@@ -27,8 +27,8 @@ import junit.framework.TestSuite;
 /**
  * Test of some of the helper methods in the Sloppy GUI.
  * 
- * @author	$Author: richard $
- * @version $Revision: 1.4 $ $Date: 2002/06/28 20:08:37 $
+ * @author	$Author$
+ * @version $Revision$ $Date$
  */
 public class TestSloppyGUI extends TestCase
 {

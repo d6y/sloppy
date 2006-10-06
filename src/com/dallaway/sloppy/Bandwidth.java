@@ -25,8 +25,8 @@ import java.text.NumberFormat;
  * Conntainer for information about a particular bandwidth setting: i.e.,
  * a label such as "28.8k" and a corresponding bytes-per-second measure.
  * 
- * @author	$Author: richard $
- * @version $Revison$ $Date: 2002/05/23 08:05:33 $
+ * @author	$Author$
+ * @version $Revison$ $Date$
  */
 public class Bandwidth
 {

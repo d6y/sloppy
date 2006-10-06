@@ -48,8 +48,8 @@ import javax.swing.event.HyperlinkListener;
 /**
  * Implementation of a graphical front end for Sloppy.
  * 
- * @author $Author: richard $
- * @version $Revision: 1.13 $ $Date: 2002/06/28 20:10:33 $
+ * @author $Author$
+ * @version $Revision$ $Date$
  */
 public class SloppyGUI extends javax.swing.JFrame implements UserInterface, HyperlinkListener
 {

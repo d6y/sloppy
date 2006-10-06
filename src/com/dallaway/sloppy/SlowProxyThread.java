@@ -50,8 +50,8 @@ import java.util.Hashtable;
  * need to identify a client.  We use IP address to do this.
  *
  * 
- * @author		$Author: richard $
- * @version	$Revision: 1.10 $ $Date: 2002/07/02 10:57:06 $
+ * @author		$Author$
+ * @version	$Revision$ $Date$
  */
 public class SlowProxyThread extends Thread
 {

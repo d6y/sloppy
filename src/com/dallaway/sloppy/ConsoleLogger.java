@@ -31,8 +31,8 @@ import java.util.Date;
  * End user events are date stamped.
  * Notices, errors and debugging lines start with a hash (#).
  * 
- * @author		$Author: richard $
- * @version	$Revision: 1.7 $ $Date: 2002/06/28 20:35:42 $
+ * @author		$Author$
+ * @version	$Revision$ $Date$
  */
 public class ConsoleLogger implements UserInterface
 {

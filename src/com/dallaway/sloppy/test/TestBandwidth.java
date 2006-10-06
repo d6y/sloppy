@@ -28,8 +28,8 @@ import com.dallaway.sloppy.Bandwidth;
 /**
  * Test of the bandwidth class.
  * 
- * @author $Author: richard $
- * @version $Revision: 1.4 $ $Date: 2002/06/28 20:08:37 $
+ * @author $Author$
+ * @version $Revision$ $Date$
  */
 public class TestBandwidth extends TestCase
 {

@@ -40,8 +40,8 @@ import javax.jnlp.UnavailableServiceException;
  * between the user interface (graphical or
  * non-graphical) and the server code.
  * 
- * @author	$Author: richard $
- * @version $Revision: 1.5 $ $Date: 2002/05/23 08:05:33 $
+ * @author	$Author$
+ * @version $Revision$ $Date$
  */
 public class Configuration
 {

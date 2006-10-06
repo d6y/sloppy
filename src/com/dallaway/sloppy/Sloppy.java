@@ -27,8 +27,8 @@ import java.util.Properties;
 /**
  * Main entry point for starting Sloppy.
  * 
- * @author	$Author: richard $
- * @version $Revision: 1.10 $ $Date: 2002/07/02 10:57:06 $
+ * @author	$Author$
+ * @version $Revision$ $Date$
  */
 public class Sloppy
 {
