@@ -1,0 +1,18 @@
+2002.07.02 v.1.1.77
+
+- Fix for bug introduced in 1.1.75: All sites were being 
+  POSTed to
+
+2002.06.28 v1.1.75
+
+- Rewrite of core proxying to work with other proxies.
+- Added icons/logo provided by Joanna Kleinschmidt, http://woadtoad.com.
+- Converted about box to use hyperlinks, as suggested 
+  by Jean-Baptiste Bugeaud, www.up2go.net 
+
+
+2002.05.13 v1.0.58
+
+- Addition of a GUI.
+- Change to the names used in the .properties file.
+- Now deployed as a signed web start application.
