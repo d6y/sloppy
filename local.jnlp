@@ -16,7 +16,7 @@
     <offline-allowed />
   </information>
   <resources>
-    <j2se version="1.3+"/>
+    <j2se version="1.5+"/>
     <jar href="sloppy.jar" main="true" />
   </resources>
   <application-desc main-class="com.dallaway.sloppy.Sloppy" />
