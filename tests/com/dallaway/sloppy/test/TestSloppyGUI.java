@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -19,62 +19,49 @@
  */
 package com.dallaway.sloppy.test;
 
+import com.dallaway.sloppy.SloppyGUI;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import com.dallaway.sloppy.Bandwidth;
-
 /**
- * Test of the bandwidth class.
+ * Test of some of the helper methods in the Sloppy GUI.
  * 
- * @author $Author$
+ * @author	$Author$
  * @version $Revision$ $Date$
  */
-public class TestBandwidth extends TestCase
+public class TestSloppyGUI extends TestCase
 {
 
-	/**
-	 * Test of the 28.8k bandwidth object.
-	 */
-	public void test28()
-	{
-		Bandwidth bw = new Bandwidth(28.8f);
-		
-		assertEquals("Wrong title", "28.8k", bw.toString());
-		
-		int expect = (int)Math.round( ((28.8 * 1024.0) / 8.0f) * 7.0/8.0f );
-		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
-	}
 
 	/**
-	 * Test of the 512k bandwidth object.
+	 * Test of the helper used to clean up URLs entered
+	 * by end users.
 	 */
-	public void test512()
+	public void testURLCleanUP()
 	{
-		Bandwidth bw = new Bandwidth(512.0f);
+		// A valid URL
+		assertEquals("http://www.newscientist.com/", SloppyGUI.clean("http://www.newscientist.com/").toExternalForm());
 		
-		assertEquals("Wrong title", "512k", bw.toString());
-		
-		int expect = (int)Math.round( ((512.0f * 1024.0) / 8.0f) * 7.0/8.0f );
-		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
+		// Missing the protocol
+		assertEquals("http://newscientist.com", SloppyGUI.clean("newscientist.com").toExternalForm());	
+			
 	}
-
 
 	/**
 	 * @see junit.framework.TestCase#TestCase(java.lang.String)
 	 */
-	public TestBandwidth(String name)
+	public TestSloppyGUI(String name)
 	{
 		super(name);
 	}
-
+	
 	/**
 	 * @return This test as a suite.
 	 */
 	public static TestSuite suite()
 	{
-		return new TestSuite(TestBandwidth.class);	
+		return new TestSuite(TestSloppyGUI.class);	
 	}
 
 	/**

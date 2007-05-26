@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -19,49 +19,62 @@
  */
 package com.dallaway.sloppy.test;
 
-import com.dallaway.sloppy.SloppyGUI;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import com.dallaway.sloppy.Bandwidth;
+
 /**
- * Test of some of the helper methods in the Sloppy GUI.
+ * Test of the bandwidth class.
  * 
- * @author	$Author$
+ * @author $Author$
  * @version $Revision$ $Date$
  */
-public class TestSloppyGUI extends TestCase
+public class TestBandwidth extends TestCase
 {
 
+	/**
+	 * Test of the 28.8k bandwidth object.
+	 */
+	public void test28()
+	{
+		Bandwidth bw = new Bandwidth(28.8f);
+		
+		assertEquals("Wrong title", "28.8k", bw.toString());
+		
+		int expect = (int)Math.round( ((28.8 * 1024.0) / 8.0f) * 7.0/8.0f );
+		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
+	}
 
 	/**
-	 * Test of the helper used to clean up URLs entered
-	 * by end users.
+	 * Test of the 512k bandwidth object.
 	 */
-	public void testURLCleanUP()
+	public void test512()
 	{
-		// A valid URL
-		assertEquals("http://www.newscientist.com/", SloppyGUI.clean("http://www.newscientist.com/").toExternalForm());
+		Bandwidth bw = new Bandwidth(512.0f);
 		
-		// Missing the protocol
-		assertEquals("http://newscientist.com", SloppyGUI.clean("newscientist.com").toExternalForm());	
-			
+		assertEquals("Wrong title", "512k", bw.toString());
+		
+		int expect = (int)Math.round( ((512.0f * 1024.0) / 8.0f) * 7.0/8.0f );
+		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
 	}
+
 
 	/**
 	 * @see junit.framework.TestCase#TestCase(java.lang.String)
 	 */
-	public TestSloppyGUI(String name)
+	public TestBandwidth(String name)
 	{
 		super(name);
 	}
-	
+
 	/**
 	 * @return This test as a suite.
 	 */
 	public static TestSuite suite()
 	{
-		return new TestSuite(TestSloppyGUI.class);	
+		return new TestSuite(TestBandwidth.class);	
 	}
 
 	/**
