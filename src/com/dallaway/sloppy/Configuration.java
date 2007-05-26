@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
@@ -43,10 +44,11 @@ import javax.jnlp.UnavailableServiceException;
  * @author	$Author$
  * @version $Revision$ $Date$
  */
-public class Configuration
+public class Configuration implements Serializable
 {
-	
-	/** The port we listen on by default */
+    private static final long serialVersionUID = 117056425192351479L;
+
+    /** The port we listen on by default */
 	public static final int DEFAULT_LISTEN_PORT = 7569;
 	
 	/** Default bandwidth to simulate */
@@ -69,13 +71,13 @@ public class Configuration
 
 	
 	/** Name of the setting in the properties file for the bandwidth */
-	private static final String BYTES_KEY = "sloppy.bytesPerSecond";
+	private static final String BYTES_KEY = "sloppy.bytesPerSecond"; //$NON-NLS-1$
 
 	/** The names of the property for the port to listen on. */
-	private static final  String PORT_KEY = "sloppy.listenPort";
+	private static final  String PORT_KEY = "sloppy.listenPort"; //$NON-NLS-1$
 	
 	/** The name of the property for the URL to proxy to. */
-	private static final String DESTINATION_KEY = "sloppy.desintationURL";
+	private static final String DESTINATION_KEY = "sloppy.desintationURL"; //$NON-NLS-1$
 
 	/** Amount of space (bytes) we need in the web cache for config. */
 	private static final long MUFFIN_SIZE = 2048;
@@ -108,7 +110,7 @@ public class Configuration
 	 * @param	props	A properties file containing zero, one or
 	 * 					more settings for sloppy.
 	 * 
-	 * @throws MalformedURLException Thrown if the destination URL is bad.
+	 * @throws MalformedURLException  if the destination URL is bad.
 	 */
 	public Configuration(Properties props) throws MalformedURLException
 	{
@@ -123,9 +125,9 @@ public class Configuration
 	 * 
 	 * @param	props	Properties to read from.
 	 * 
-	 * @throws MalformedURLException Thrown if the destination URL is bad.
+	 * @throws MalformedURLException  if the destination URL is bad.
 	 */
-	private void init(Properties props) throws MalformedURLException
+	private void init(final Properties props) throws MalformedURLException
 	{
 	    String value = (String)props.get(BYTES_KEY);
     	if (value != null) 
@@ -154,26 +156,26 @@ public class Configuration
 	 */
 	public void loadMuffins()
 	{
-		ui.debug("Loading muffins");
+		ui.debug("Loading muffins"); //$NON-NLS-1$
 
 		PersistenceService ps = null; 
     	BasicService bs = null; 
 
     	try 
     	{ 
-        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService"); 
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService"); 
+        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
     	} 
     	catch (UnavailableServiceException e) 
     	{ 
-    		ui.error("Unable to load saved settings", e);
+    		ui.error(Messages.getString("error.failedToLoadSavedSettings"), e); //$NON-NLS-1$
     		return;
 	    } 	
 	    	    
 	    // We store a properties file in the "configuration" address.
 	    try
 	    {
-		    URL config = new URL(bs.getCodeBase(), "configuration");
+		    URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
 			FileContents contents = getOrCreateFile(ps, config);
 			if (contents == null)
 			{
@@ -189,7 +191,7 @@ public class Configuration
 	    }
 	    catch (IOException iox)
 	    {
-	    	ui.debug("Failed to read muffins: "+ iox);	
+	    	ui.debug("Failed to read muffins: "+ iox);	 //$NON-NLS-1$
 	    }
 
 	}
@@ -202,11 +204,11 @@ public class Configuration
 	 * @param	ps		The persistance service to use.
 	 * @param	address	The address to lookup.
 	 * @return The file contents at the address.
-	 * @throws IOException	Thrown if there was a problem reading the muffin.
+	 * @throws IOException	if there was a problem reading the muffin.
 	 */
-	private FileContents getOrCreateFile(PersistenceService ps, URL address) throws IOException
+	private FileContents getOrCreateFile(final PersistenceService ps, final URL address) throws IOException
 	{
-		ui.debug("Muffin lookup");
+		ui.debug("Muffin lookup"); //$NON-NLS-1$
 		FileContents toRet = null;
 		try
 		{
@@ -218,12 +220,12 @@ public class Configuration
 		}
 		catch (FileNotFoundException fnf)
 		{
-			ui.debug("Creating muffins");
+			ui.debug("Creating muffins"); //$NON-NLS-1$
 			// Doesn't exist, so create:
 			long sizeAllocated = ps.create(address, MUFFIN_SIZE);	
 			if (sizeAllocated < MUFFIN_SIZE)
 			{
-				ui.debug("Asked for "+MUFFIN_SIZE+" bytes; was allocated "+sizeAllocated);	
+				ui.debug("Asked for "+MUFFIN_SIZE+" bytes; was allocated "+sizeAllocated);	 //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			toRet = ps.get(address);
 		}
@@ -236,26 +238,26 @@ public class Configuration
 	 */
 	public void saveMuffins()
 	{
-		ui.debug("Saving muffins");
+		ui.debug("Saving muffins"); //$NON-NLS-1$
 
 		PersistenceService ps = null; 
     	BasicService bs = null; 
 
     	try 
     	{ 
-        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService"); 
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService"); 
+        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
+        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
     	} 
     	catch (UnavailableServiceException e) 
     	{ 
-    		ui.error("Unable to save settings", e);
+    		ui.error(Messages.getString("error.failedToSaveSettings"), e); //$NON-NLS-1$
     		return;
 	    } 	
 	    	    
 	    // We store a properties file in the "configuration" address.
 	    try
 	    {
-		    URL config = new URL(bs.getCodeBase(), "configuration");
+		    URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
 			FileContents contents = getOrCreateFile(ps, config);
 			if (contents == null)
 			{
@@ -266,16 +268,16 @@ public class Configuration
 			PrintStream out = new PrintStream( contents.getOutputStream(true) );
 			if (destination != null)
 			{
-				out.println(DESTINATION_KEY + "=" + destination.toExternalForm());
+				out.println(DESTINATION_KEY + "=" + destination.toExternalForm()); //$NON-NLS-1$
 			}
-			out.println(PORT_KEY + "=" + localPort);
-			out.println(BYTES_KEY + "=" + bytesPerSecond);
+			out.println(PORT_KEY + "=" + localPort); //$NON-NLS-1$
+			out.println(BYTES_KEY + "=" + bytesPerSecond); //$NON-NLS-1$
 			out.close();
 			
 	    }
 	    catch (IOException iox)
 	    {
-	    	ui.debug("Failed to write muffins: "+ iox);	
+	    	ui.debug("Failed to write muffins: "+ iox);	 //$NON-NLS-1$
 	    }
 
 	}
@@ -287,9 +289,9 @@ public class Configuration
 	public String toString()
 	{
 		StringBuffer b = new StringBuffer();
-		b.append("Port=").append(localPort);
-		b.append(" Destination=").append(destination);
-		b.append(" Bytes per second=").append(bytesPerSecond);
+		b.append("Port=").append(localPort); //$NON-NLS-1$
+		b.append(" Destination=").append(destination); //$NON-NLS-1$
+		b.append(" Bytes per second=").append(bytesPerSecond); //$NON-NLS-1$
 		return b.toString();
 	}
 	
@@ -304,7 +306,7 @@ public class Configuration
 	/**
 	 * @param bytesPerSecond Maximum bytes per second.
 	 */
-	public void setBytesPerSecond(int bytesPerSecond)
+	public void setBytesPerSecond(final int bytesPerSecond)
 	{
 		this.bytesPerSecond = bytesPerSecond;
 	}
@@ -320,7 +322,7 @@ public class Configuration
 	/**
 	 * @param destination The address to proxy to.
 	 */
-	public void setDestination(URL destination)
+	public void setDestination(final URL destination)
 	{
 		this.destination = destination;
 	}
@@ -336,7 +338,7 @@ public class Configuration
 	/**
 	 * @param localPort The port that Sloppy listens on.
 	 */
-	public void setLocalPort(int localPort)
+	public void setLocalPort(final int localPort)
 	{
 		this.localPort = localPort;
 	}
@@ -345,7 +347,7 @@ public class Configuration
 	 * @param	ui	The user interface to use for communicating
 	 * 				with the user.
 	 */
-	public void setUserInterface(UserInterface ui)
+	public void setUserInterface(final UserInterface ui)
 	{
 		this.ui = ui;
 	}
@@ -371,7 +373,7 @@ public class Configuration
 	 * @param server The server listening for proxy requests.
 
 	 */
-	public void setServer(SloppyServer server)
+	public void setServer(final SloppyServer server)
 	{
 		this.server = server;
 	}

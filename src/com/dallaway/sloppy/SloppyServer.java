@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -20,6 +20,7 @@
 package com.dallaway.sloppy;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -35,10 +36,12 @@ import java.net.Socket;
  * @author		$Author$
  * @version	$Revision$ $Date$
  */
-public class SloppyServer implements Runnable
+public class SloppyServer implements Runnable, Serializable
 {
 	
-	/** Global properties for this run of sloppy.*/
+    private static final long serialVersionUID = -2959524626361966475L;
+
+    /** Global properties for this run of sloppy.*/
 	private Configuration conf;
 
 	/** Is this proxy running? */
@@ -47,7 +50,7 @@ public class SloppyServer implements Runnable
 	/**
 	 * @param	conf	The configuration for this run of the server.
 	 */
-	public SloppyServer(Configuration conf)
+	public SloppyServer(final Configuration conf)
 	{
 		this.conf = conf;
 	}
@@ -75,7 +78,7 @@ public class SloppyServer implements Runnable
     }
 
 	ReleaseInfo release = new ReleaseInfo();
-    ui.notice("Starting " + release.getRelease());
+    ui.notice(Messages.getString("info.startingNotice") + release.getRelease()); //$NON-NLS-1$
 	ui.notice( release.getCopyright());
 	
     // Start listening for proxy requests
@@ -87,11 +90,11 @@ public class SloppyServer implements Runnable
     }
     catch (IOException iox)
     {
-    	ui.error("Failed to start. Is the port in use?", iox);
+    	ui.error(Messages.getString("error.failedToStartBecausePortInUse"), iox); //$NON-NLS-1$
     	return;
     }
 
-	ui.notice("Listening "+conf);    
+	ui.notice(Messages.getString("info.listening")+conf);     //$NON-NLS-1$
 
     running = true;
     while (running)
@@ -106,7 +109,7 @@ public class SloppyServer implements Runnable
         
         if (!running)
         {
-        	ui.debug("Stopping...");
+        	ui.debug("Stopping..."); //$NON-NLS-1$
         	break;
         }
         
@@ -118,7 +121,7 @@ public class SloppyServer implements Runnable
       }
       catch (IOException iox)
       {
-        ui.debug("Error accepting request: "+iox);
+        ui.debug("Error accepting request: "+iox); //$NON-NLS-1$
       }
 
     }
@@ -129,10 +132,10 @@ public class SloppyServer implements Runnable
 	}
 	catch (IOException iox)
 	{
-		ui.error("Error while stopping listener", iox);
+		ui.error(Messages.getString("error.errorWhileStopping"), iox); //$NON-NLS-1$
 	}
 
-    ui.notice("Shutdown");
+    ui.notice(Messages.getString("info.shutdown")); //$NON-NLS-1$
   }
 
 	/**
@@ -150,7 +153,7 @@ public class SloppyServer implements Runnable
 		// Wake up the socket listener:
 		try
 		{
-			Socket s = new Socket("127.0.0.1", conf.getLocalPort());
+			Socket s = new Socket("127.0.0.1", conf.getLocalPort()); //$NON-NLS-1$
 			s.close();
 		}
 		catch (IOException iox)

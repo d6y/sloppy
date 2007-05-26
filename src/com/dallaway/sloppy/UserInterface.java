@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -19,6 +19,8 @@
  */
 package com.dallaway.sloppy;
 
+import java.io.Serializable;
+
 
 /**
  * Interface for communicating with the end user.
@@ -30,7 +32,7 @@ package com.dallaway.sloppy;
  * @author	$Author$
  * @version $Revision$ $Date$
  */
-public interface UserInterface
+public interface UserInterface extends Serializable
 {
 	
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -10,12 +10,12 @@
  * 
  * Sloppy is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
  * along with Sloppy; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	 02111-1307	 USA
  */
 package com.dallaway.sloppy;
 
@@ -26,10 +26,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * All requests are handed off to an instance of this class for co-ordinating
@@ -38,7 +39,7 @@ import java.util.Hashtable;
  *
  * This thread reads from the browser, sends to the web server, and
  * then reads from the web server and copies what it receives
- * back to the web browser.  This final copy back is slowed down
+ * back to the web browser.	 This final copy back is slowed down
  * to simulate the selected modem speed.
  * 
  * To simplify the code, HTTP/1.1 keep-alive connections are
@@ -51,7 +52,7 @@ import java.util.Hashtable;
  *
  * 
  * @author		$Author$
- * @version	$Revision$ $Date$
+ * @version $Revision$ $Date$
  */
 public class SlowProxyThread extends Thread
 {
@@ -67,8 +68,8 @@ public class SlowProxyThread extends Thread
 	/** Buffer size for reading data from web server. */
 	private static final int BUFFER_SIZE = 2048;
 	
-    /** The bottleneck to limit this user to a specific number of bytes per millisecond. */
-    private Bottleneck bottleneck;
+	/** The bottleneck to limit this user to a specific number of bytes per millisecond. */
+	private Bottleneck bottleneck;
 
 	
 	/**
@@ -77,7 +78,7 @@ public class SlowProxyThread extends Thread
 	 * @param request The client request to proxy.
 	 * @param conf	The application configuration.
 	 */
-	public SlowProxyThread(Socket request, Configuration conf)
+	public SlowProxyThread(final Socket request, final Configuration conf)
 	{
 		this.ui = conf.getUserInterface();
 		this.request = request;
@@ -132,13 +133,13 @@ public class SlowProxyThread extends Thread
 	 * http://www.javaworld.com/javaworld/jw-03-2001/jw-0323-traps.html
 	 * 
 	 * 
-	 * @throws IOException	Thrown if there was a problem communicating with the web server
-	 * 						or the web browser.
+	 * @throws IOException	if there was a problem communicating with the web server
+	 *						or the web browser.
 	 */
 	private void processRequest() throws IOException
 	{
 	
-		ui.debug("Staring request");
+		ui.debug("Starting request");
 	
 		// The stream from the web browser:
 		BufferedReader inFromWebBrowser = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -148,6 +149,12 @@ public class SlowProxyThread extends Thread
 
 		// Read the first line from the browser, which will be something like "GET /somefile HTTP/1.1"
 		String firstLine = inFromWebBrowser.readLine();
+        if (firstLine == null)
+        {
+            inFromWebBrowser.close();
+            outputToWebBrowser.close();
+            return;
+        }
 		int space = firstLine.indexOf(" ");
 
 		String method = firstLine.substring(0, space); // GET or POST etc.
@@ -156,7 +163,7 @@ public class SlowProxyThread extends Thread
 		String file = firstLine.substring(space+1, space2); // The file being requested
 
 		// Read the rest of the message from the web browser:
-		Hashtable headers = readHeaders(inFromWebBrowser);
+		HashMap<String, String> headers = readHeaders(inFromWebBrowser);
 		String requestBody = readBody(inFromWebBrowser);
 
 		bottleneck.mark(); // mark an event, to record elapse time.
@@ -167,17 +174,35 @@ public class SlowProxyThread extends Thread
 		// Set up the request headers and body and send the request to the server
 		ui.debug("Sending request to web server");
 		sendRequest(con, headers, requestBody);
-  		con.connect();  
+		con.connect();	
 
 		// Read reply from server:
-		InputStream rawInputFromWebServer = con.getInputStream();
+		InputStream rawInputFromWebServer = null;
+		try 
+		{
+			rawInputFromWebServer = con.getInputStream();
+		}
+		catch (IOException ex) 
+		{
+			// Ignore - could be a FileNotFoundException for a 404
+		}
+		if (rawInputFromWebServer == null)
+		{
+			rawInputFromWebServer = con.getErrorStream();
+		}
+		
 
-		// Copy the response back to the web browser:			
+		// Copy the headers back to the web browser:			
 		copyHeadersToWebBrowser(con, outputToWebBrowser);
-		copyBodyToWebBrowser(rawInputFromWebServer, outputToWebBrowser);
-	
-   		rawInputFromWebServer.close();
-        inFromWebBrowser.close();
+		
+		// Copy the body back to the web browser (if any):			
+		if (rawInputFromWebServer != null) 
+		{
+			copyBodyToWebBrowser(rawInputFromWebServer, outputToWebBrowser);
+			rawInputFromWebServer.close();
+		}
+		
+		inFromWebBrowser.close();
 		outputToWebBrowser.close();
 
 		con.disconnect();
@@ -189,14 +214,10 @@ public class SlowProxyThread extends Thread
 	 * Copy the body of the http request from the web server to the web browser.
 	 * @param inFromWebServer	The input stream to Sloppy from the web server.
 	 * @param outputToWebBrowser	The output stream from Sloppy to the web browser.
-	 * @throws IOException Thrown if there was a communication error.
+	 * @throws IOException  if there was a communication error.
 	 */
-	private void copyBodyToWebBrowser(InputStream inFromWebServer, OutputStream outputToWebBrowser) throws IOException
+	private void copyBodyToWebBrowser(final InputStream inFromWebServer, final OutputStream outputToWebBrowser) throws IOException
 	{
-
-		// Mark the end of headers/strt of body with a new line.
-		outputToWebBrowser.write('\r');
-		outputToWebBrowser.write('\n');
 
 		byte[] buffer = new byte[BUFFER_SIZE];
 		
@@ -211,7 +232,7 @@ public class SlowProxyThread extends Thread
 				break; // end of input
 			}
 			
-	        // Before we send the data, delay it:
+			// Before we send the data, delay it:
 			long delay = bottleneck.restrict(bytesRead);
 			pause(delay);	
 						
@@ -228,13 +249,13 @@ public class SlowProxyThread extends Thread
 	 * 
 	 * @param con	The connection to the web server.
 	 * @param outputToWebBrowser	The output stream from Sloppy to the web browser.
-	 * @throws IOException	Thrown if there was a communication error.
+	 * @throws IOException	 if there was a communication error.
 	 */
-	private void copyHeadersToWebBrowser(HttpURLConnection con, OutputStream outputToWebBrowser) throws IOException
-	{     
+	private void copyHeadersToWebBrowser(final HttpURLConnection con, final OutputStream outputToWebBrowser) throws IOException
+	{	  
 		int i=0;
 		while (true)
-		{						
+		{
 			String value = con.getHeaderField(i);
 			if (value == null)
 			{
@@ -256,6 +277,26 @@ public class SlowProxyThread extends Thread
 				// Some headers, like the status line, have no name
 				outputToWebBrowser.write(name.getBytes());
 				outputToWebBrowser.write(": ".getBytes());
+				
+				// Change the redirection to the localhost
+				if (name.equals("Location"))
+				{
+					URL location;
+					try 
+					{
+						location = new URL(value);
+						if (location.getHost().equals(conf.getDestination().getHost())) 
+						{
+							location = new URL("http", "127.0.0.1", conf.getLocalPort(), 
+								location.getFile());
+							value = location.toString();
+						}
+					}
+					catch (MalformedURLException ex) 
+					{
+						// Ignore - don't bother changing the Location header
+					}
+				}
 			}
 
 			outputToWebBrowser.write(value.getBytes());
@@ -266,6 +307,10 @@ public class SlowProxyThread extends Thread
 			ui.debug("< "+name+": "+value);
 			
 		}
+        
+        // Mark the end of headers/start of body with a new line.
+		outputToWebBrowser.write('\r');
+		outputToWebBrowser.write('\n');
 		
 	}
 
@@ -275,22 +320,21 @@ public class SlowProxyThread extends Thread
 	 * Send the request received from the web browser on to the web server.
 	 * 
 	 * @param	con		The connection to the web server.
-	 * @param	headers	The heeaders to send to the web server.
+	 * @param	headers The headers to send to the web server.
 	 * @param	body	The body to send to the web server.
-	 * @throws IOException	Thrown if there was a problem communicating with the web server.
+	 * @throws IOException	if there was a problem communicating with the web server.
 	 */
-	private void sendRequest(HttpURLConnection con, Hashtable headers, String body) throws IOException
+	private void sendRequest(final HttpURLConnection con, final HashMap<String, String> headers, final String body) throws IOException
 	{
 
 		// Send the headers:	
-		Enumeration e = headers.keys();
-		while (e.hasMoreElements())
-		{
-			String name = (String)e.nextElement();
+        for(Map.Entry<String,String> entry: headers.entrySet())
+        {
+            String name = entry.getKey();
 			// Host is already set {@see getConnection}, and we don't want to do Keep-Alive
 			if (!"Host".equalsIgnoreCase(name) && !"Connection".equalsIgnoreCase(name))
 			{
-				String value = (String)headers.get(name);
+				String value = entry.getKey();
 				ui.debug("> "+name+"="+value);
 				con.setRequestProperty(name, value);	
 			}
@@ -299,15 +343,15 @@ public class SlowProxyThread extends Thread
 		// Send the body (just opening the conenction
 		// seems to make some web servers think you're
 		// doing a POST).
-        if (body != null && body.length() > 0)
-        {
-	        OutputStream outputToWebServer = con.getOutputStream();
-	        OutputStreamWriter osw = new OutputStreamWriter(outputToWebServer);
-   	        osw.write(body);
-    	    osw.flush();
-        	osw.close();
-				outputToWebServer.close();	
-        }
+		if (body != null && body.length() > 0)
+		{
+			OutputStream outputToWebServer = con.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(outputToWebServer);
+			osw.write(body);
+			osw.flush();
+			osw.close();
+			outputToWebServer.close();	
+		}
 
 	}
 
@@ -318,9 +362,9 @@ public class SlowProxyThread extends Thread
 	 * @param	method	The HTTP metod (e.g., GET, POST).
 	 * @param	file	The file being requested.
 	 * @return The HttpURLConnection to the web server (not opened).
-	 * @throws IOException	Thrown if there was a problem setting up the connection.
+	 * @throws IOException	if there was a problem setting up the connection.
 	 */
-	private HttpURLConnection getConnection(String method, String file) throws IOException
+	private HttpURLConnection getConnection(final String method, final String file) throws IOException
 	{
 		URL url = new URL(conf.getDestination(), file);
 		
@@ -332,27 +376,28 @@ public class SlowProxyThread extends Thread
 		
 		con.setAllowUserInteraction(true);
 		con.setDoInput(true);
-        con.setDoOutput(true);
-        con.setUseCaches(false);
-        con.setRequestMethod(method);
-        
-        /* 
-         * The Host: header should be for the original request not
-         * sloppy.  E.g., if we're proxying to someplace:8080 then then
-         * header should be host:someplace:8080, not localhost:7569/ 
-         * (where Sloppy runs)
-         * 
-         * This is because some application servers use the Host: header
-         * to know what application to call.
-         */
-        StringBuffer originHost = new StringBuffer();
-        originHost.append(conf.getDestination().getHost());
-        int port = conf.getDestination().getPort();
-        if (port != -1)
-        {
-        	originHost.append(":").append(port);	
-        }
-        con.setRequestProperty("Host", originHost.toString());
+		con.setDoOutput(true);
+		con.setUseCaches(false);
+		con.setRequestMethod(method);
+		con.setInstanceFollowRedirects(false);
+		
+		/* 
+		 * The Host: header should be for the original request not
+		 * sloppy.	E.g., if we're proxying to someplace:8080 then then
+		 * header should be host:someplace:8080, not localhost:7569/ 
+		 * (where Sloppy runs)
+		 * 
+		 * This is because some application servers use the Host: header
+		 * to know what application to call.
+		 */
+		StringBuffer originHost = new StringBuffer();
+		originHost.append(conf.getDestination().getHost());
+		int port = conf.getDestination().getPort();
+		if (port != -1)
+		{
+			originHost.append(":").append(port);	
+		}
+		con.setRequestProperty("Host", originHost.toString());
 		
 		// We don't do Keep-Alive to keep this code simple.
 		con.setRequestProperty("Connection", "close");
@@ -368,15 +413,20 @@ public class SlowProxyThread extends Thread
 	 * 
 	 * @param	r	The input from the web browser.
 	 * @return The body of the request.
-	 * @throws IOException Thrown if there was a problem reading from the web browser.
+	 * @throws IOException if there was a problem reading from the web browser.
 	 */
-	private String readBody(BufferedReader r) throws IOException
+	private String readBody(final BufferedReader r) throws IOException
 	{
 		StringBuffer b = new StringBuffer();
-		String line = null;
-		while (r.ready() && (line=r.readLine()) != null)
+		char[] buffer = new char[BUFFER_SIZE];
+		while (r.ready()) 
 		{
-			b.append(line);
+			int charsRead = r.read(buffer);
+			if (charsRead == -1) 
+			{
+				break;
+			}
+			b.append(buffer, 0, charsRead);
 		}
 		return b.toString();		
 	}
@@ -385,13 +435,13 @@ public class SlowProxyThread extends Thread
 	/**
 	 * Read the HTTP headers from the web browser.
 	 * 
-	 * @param r	The input from the web browser.
+	 * @param r The input from the web browser.
 	 * @return A hashtable of name/value pairs.
-	 * @throws IOException	Thrown if there was a problem reading from the web browers.
+	 * @throws IOException	if there was a problem reading from the web browers.
 	 */
-	private Hashtable readHeaders(BufferedReader r) throws IOException
+	private HashMap<String, String> readHeaders(final BufferedReader r) throws IOException
 	{	
-		Hashtable toRet = new Hashtable();
+		HashMap<String, String> toRet = new HashMap<String, String>();
 		
 		String line = r.readLine();
 		while (line != null && !"".equals(line))
@@ -425,7 +475,7 @@ public class SlowProxyThread extends Thread
 	 * 
 	 * @param	milliseconds	The number of milliseconds to sleep.
 	 */
-	private void pause(long milliseconds)
+	private void pause(final long milliseconds)
 	{
 		if (milliseconds <= 0)
 		{

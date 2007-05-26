@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -19,7 +19,7 @@
  */
 package com.dallaway.sloppy;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * Mechanism to work out a delay before sending data between client and server.
@@ -41,7 +41,7 @@ public class Bottleneck
 {
 
   /** Hash to Usage objects, keyed by clientId. */
-  private static Hashtable clients = new Hashtable();
+  private final static HashMap<String,Usage> clients = new HashMap<String, Usage>();
 
   /** This client's id (e.g., IP Address). */
   private String clientId = null;
@@ -58,7 +58,7 @@ public class Bottleneck
    * @param clientId  A way to identify a client.
    * @param conf	The system configuration (i.e., bandwidth setting).
    */
-  public Bottleneck(String clientId, Configuration conf)
+  public Bottleneck(final String clientId, final Configuration conf)
   {
     this.clientId = clientId;
 	this.conf = conf;
@@ -71,7 +71,7 @@ public class Bottleneck
    */
   private synchronized void getUsage()
   {
-      usage = (Usage)clients.get(clientId);
+      usage = clients.get(clientId);
       if (usage == null)
       {
         usage = new Usage();
@@ -98,7 +98,7 @@ public class Bottleneck
    * 
    * @return Milliseconds to sleep for; may be -ve indicating no sleep required.
    */
-  public long restrict(int bytesRead)
+  public long restrict(final int bytesRead)
   {
       // Keep track of bytes sent
       getUsage();

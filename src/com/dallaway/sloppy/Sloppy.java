@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -35,8 +35,7 @@ public class Sloppy
 
 	/** By default start the GUI. */
 	private static boolean startGUI = true;
-
-
+    
 	/** Do we want debug output? */
 	private static boolean debug = false;
 
@@ -50,7 +49,7 @@ public class Sloppy
    * To override the default settings supply a configuration file.  See default.configuration for an example.
    * 
    */
-  public static void main(String[] args) 
+  public static void main(final String[] args) 
   {
 
 	/*
@@ -71,16 +70,16 @@ public class Sloppy
 	 * http://www.javaworld.com/javaworld/javatips/jw-javatip47.html
 	 */
 
-	String proxyHost = System.getProperty("proxyHost");
-	String proxyPort = System.getProperty("proxyPort");
+	String proxyHost = System.getProperty("proxyHost"); //$NON-NLS-1$
+	String proxyPort = System.getProperty("proxyPort"); //$NON-NLS-1$
 
 	if (proxyHost != null)
 	{
 		Properties props = System.getProperties();
-		props.put("http.proxyHost", proxyHost);
+		props.put("http.proxyHost", proxyHost); //$NON-NLS-1$
 		if (proxyPort != null)
 		{
-			props.put("http.proxyPort", proxyPort);
+			props.put("http.proxyPort", proxyPort); //$NON-NLS-1$
 		}
 	}
 
@@ -94,7 +93,7 @@ public class Sloppy
     }
     catch (IOException iox)
     {
-    	System.err.println("Failed to start Sloppy: "+iox);
+    	System.err.println(Messages.getString("error.failedToStart")+iox); //$NON-NLS-1$
     	System.exit(1);	
     }
 
@@ -106,7 +105,7 @@ public class Sloppy
 		SloppyGUI gui = new SloppyGUI(conf);
 		conf.setUserInterface(gui);
 	 	conf.setServer(proxy);
-		gui.show(); 			
+        gui.setVisible(true);		
  	}	   
 
    	conf.getUserInterface().setDebug(debug);
@@ -122,9 +121,9 @@ public class Sloppy
    *
    * @param args The command line arguments.
    * @return The system configuration to run with.
-   * @throws IOException Thrown if there was a problem reading the properties file.
+   * @throws IOException  if there was a problem reading the properties file.
    */
-  private static Configuration readArgs(String[] args) throws IOException
+  private static Configuration readArgs(final String[] args) throws IOException
   {
     
     Configuration config = null;
@@ -133,19 +132,19 @@ public class Sloppy
 
     for(int i=0; i<args.length; i++)
     {
-      if (args[i].equalsIgnoreCase("+gui") )
+      if (args[i].equalsIgnoreCase("+gui") ) //$NON-NLS-1$
       {
         startGUI = true;
       }
-      else if (args[i].equalsIgnoreCase("-gui"))
+      else if (args[i].equalsIgnoreCase("-gui")) //$NON-NLS-1$
       {
        startGUI = false;
       }
-	  else if (args[i].equalsIgnoreCase("-debug"))
+	  else if (args[i].equalsIgnoreCase("-debug")) //$NON-NLS-1$
 	  {
 	  	debug = true;	
 	  }
-	  else if (args[i].equalsIgnoreCase("-site"))
+	  else if (args[i].equalsIgnoreCase("-site")) //$NON-NLS-1$
 	  {
 	  	i++;
 	  	url = args[i];	
@@ -166,7 +165,15 @@ public class Sloppy
     else
     {
 	    Properties props = new Properties();
-    	props.load(new FileInputStream(file));
+    	FileInputStream in = new FileInputStream(file);
+        try
+        {
+            props.load(in);
+        }
+        finally
+        {
+            in.close();
+        }
 		config = new Configuration(props);
     }
 

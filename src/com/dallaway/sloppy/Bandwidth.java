@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -32,10 +32,10 @@ public class Bandwidth
 {
 	
 	/** The label shown to the user for this bandwidth setting. */
-	private String label;
+	private final String label;
 	
 	/** The maximum bytes per second for this bandwidth setting. */
-	private int bytesPerSecond;
+	private final int bytesPerSecond;
 
 	
 	/**
@@ -43,7 +43,7 @@ public class Bandwidth
 	 * 
 	 * @param	kiloBitsPerSecond	Kilobits per second.
 	 */
-	public Bandwidth(float kiloBitsPerSecond)
+	public Bandwidth(final float kiloBitsPerSecond)
 	{
 	
        	/*
@@ -74,7 +74,7 @@ public class Bandwidth
 	/**
 	 * @return The label.
 	 */
-	public String toString()
+	@Override public String toString()
 	{
 		return this.label;
 	}

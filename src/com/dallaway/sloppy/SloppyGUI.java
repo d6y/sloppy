@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -60,13 +60,13 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	private Configuration conf;
 
 	/** Default URL string to show to the user. */
-	private static final String DEFAULT_URL = "http://";
+	private static final String DEFAULT_URL = "http://"; //$NON-NLS-1$
 	
 	/** Location of the logo resource in the Sloppy jar. */
-	private static final String LOGO = "/com/dallaway/sloppy/resources/sloppy_logo64.png";
+	private static final String LOGO = "/com/dallaway/sloppy/resources/sloppy_logo64.png"; //$NON-NLS-1$
 
 	/** Location of the 16x16 icon. */
-	private static final String ICON16 = "/com/dallaway/sloppy/resources/sloppy_16.png";
+	private static final String ICON16 = "/com/dallaway/sloppy/resources/sloppy_16.png"; //$NON-NLS-1$
 
 
 	/** Are we showing debug output? */
@@ -228,49 +228,52 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 */
 	private String getAboutText()
 	{
-		StringBuffer about = new StringBuffer();
+		StringBuilder about = new StringBuilder();
 
    		ReleaseInfo release = new ReleaseInfo();
-		about.append("<P><B>").append(release.getRelease()).append("</B></P>");
-		about.append("<P>").append( release.getCopyright()).append("</P>");				
+		about.append("<p><b>").append(release.getRelease()).append("</b></p>"); //$NON-NLS-1$ //$NON-NLS-2$
+		about.append("<p>").append( release.getCopyright()).append("</p>");				 //$NON-NLS-1$ //$NON-NLS-2$
 
-		about.append("<P>").append("Sloppy logo by <A HREF='http://woadtoad.com'>Joanna Kleinschmidt</A></P>");
+		about.append("<p>").append(Messages.getString("credit.logo1")).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
      
-		about.append("<P>If reporting a bug or requesting a feature, please include the information ");
-		about.append("presented here in your email to <A HREF='mailto:sloppy@dallaway.com'>sloppy@dallaway.com</A></P>");
+		about.append("<p>"); //$NON-NLS-1$
+        about.append(Messages.getString("bugReports")); //$NON-NLS-1$
+        about.append("</p>"); //$NON-NLS-1$
 				
+        // This text not internationalized because RD needs to be able to read it
+        // if submitted as part of a bug report :-/
 				
-		append(about, "Java", new String[] {"java.version", "java.vendor"});
-		append(about, "Machine", new String[] {"os.name", "os.version", "os.arch"});
-		append(about, "Web Start", new String[] {"javawebstart.version", "jnlpx.home", "jnlpx.jvm"	});
-		append(about, "VM", new String[] {"java.vm.name","java.vm.version", "java.vm.vendor" } );
-		append(about, "Proxy:", new String[] {"proxyHost", "proxyPort"});
+		append(about, "Java", new String[] {"java.version", "java.vendor"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		append(about, "Machine", new String[] {"os.name", "os.version", "os.arch"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		append(about, "Web Start", new String[] {"javawebstart.version", "jnlpx.home", "jnlpx.jvm"	}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		append(about, "VM", new String[] {"java.vm.name","java.vm.version", "java.vm.vendor" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		append(about, "Proxy:", new String[] {"proxyHost", "proxyPort"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		
-		about.append("<P>Port: ").append(conf.getLocalPort()).append("</P>");
-		about.append("<P>Bandwidth: ").append(conf.getBytesPerSecond());
+		about.append("<p>").append("Port: ").append(conf.getLocalPort()).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		about.append("<p>").append("Bandwidth: ").append(conf.getBytesPerSecond()); //$NON-NLS-1$ //$NON-NLS-2$
 		Bandwidth bw = (Bandwidth)bandwidthDropdown.getSelectedItem();
-		about.append(" b, ").append(bw.toString());
-		about.append("</P>");
+		about.append(" b, ").append(bw.toString()); //$NON-NLS-1$
+		about.append("</p>"); //$NON-NLS-1$
 
 
 		try
 		{
-			about.append("<P>Client: ").append(InetAddress.getLocalHost().getHostName() ).append("</P>");
+			about.append("<p>").append("Client: ").append(InetAddress.getLocalHost().getHostName() ).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch (UnknownHostException ukh)
 		{
-			about.append("<P>Client: unknown</P>");
+			about.append("<p>").append("Client: unknown").append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		if (conf.getDestination() == null)
 		{
-			about.append("<P>Destination: not set</P>");
+			about.append("<p>").append("Destination: not set").append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		else
 		{
-			about.append("<P>Destination: ").append(conf.getDestination().toExternalForm() ).append("</P>");
+			about.append("<p>").append("Destination: ").append(conf.getDestination().toExternalForm() ).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		return about.toString();
@@ -283,14 +286,14 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 * @param	title	The title to prefix before the values.
 	 * @param	keys	Array of System property names.
 	 */
-	private void append(StringBuffer buffer, String title, String[] keys)
+	private void append(final StringBuilder buffer, final String title, final String[] keys)
 	{
-		buffer.append("<P>").append(title).append(": ");
+		buffer.append("<p>").append(title).append(": "); //$NON-NLS-1$ //$NON-NLS-2$
 		for(int i=0, n=keys.length; i<n;i++)
 		{
-			buffer.append(System.getProperty(keys[i])).append(" ");
+			buffer.append(System.getProperty(keys[i])).append(" "); //$NON-NLS-1$
 		}	
-		buffer.append("</P>");
+		buffer.append("</p>"); //$NON-NLS-1$
 	}
 
     /** 
@@ -300,7 +303,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
      * @param bandwidthOptions	The bandwidth drop-down is populated with
      * 							these values.
      */
-    private void initComponents(Bandwidth[] bandwidthOptions) 
+    private void initComponents(final Bandwidth[] bandwidthOptions) 
     {
         tabbedPane = new javax.swing.JTabbedPane();
         sloppyPanel = new javax.swing.JPanel();
@@ -322,7 +325,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
         aboutScrollPane = new javax.swing.JScrollPane();
 
 		// Set the title and listener for the outer frame:
-        setTitle("Sloppy");
+        setTitle(Messages.getString("name")); //$NON-NLS-1$
         addWindowListener(new java.awt.event.WindowAdapter() 
         {
             public void windowClosing(java.awt.event.WindowEvent evt) 
@@ -336,11 +339,11 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 
 		// Set up the tabbed pane and the always-visable QUIT button:
         
-        tabbedPane.addTab("Sloppy", sloppyPanel);
-        tabbedPane.addTab("Options", optionsPanel);
-        tabbedPane.addTab("About", aboutPanel);
+        tabbedPane.addTab(Messages.getString("tab.sloppy.title"), sloppyPanel); //$NON-NLS-1$
+        tabbedPane.addTab(Messages.getString("tab.options.title"), optionsPanel); //$NON-NLS-1$
+        tabbedPane.addTab(Messages.getString("tab.about.title"), aboutPanel); //$NON-NLS-1$
 
-        quitButton.setText("Quit");
+        quitButton.setText(Messages.getString("button.quit")); //$NON-NLS-1$
         quitButton.addActionListener(new java.awt.event.ActionListener() 
         {
             public void actionPerformed(java.awt.event.ActionEvent evt) 
@@ -386,7 +389,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		
 
 	    aboutPanel.setLayout(new GridBagLayout());
-		aboutText.setContentType("text/html");
+		aboutText.setContentType("text/html"); //$NON-NLS-1$
 		
 
      
@@ -425,7 +428,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		        
         gbc.gridx = 0;
         gbc.gridy = 0;
-        portLabel.setText("Port number:");
+        portLabel.setText(Messages.getString("prompt.port")); //$NON-NLS-1$
 		optionsPanel.add(portLabel, gbc);
         
         gbc.gridx = 1;
@@ -433,7 +436,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
         gbc.anchor = GridBagConstraints.WEST;
 		optionsPanel.add(portTextBox,  gbc);
         
-        applyButton.setText("Apply");
+        applyButton.setText(Messages.getString("button.apply")); //$NON-NLS-1$
         gbc.gridx = 1;
         gbc.gridy = 1;
         optionsPanel.add(applyButton, gbc);
@@ -481,11 +484,11 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		
 		// 1. The "Address label" and text area
         
-        webLabel.setText("1. Enter the address of the site to view");
+        webLabel.setText(Messages.getString("prompt.enterUrl")); //$NON-NLS-1$
         gbc.gridy=0;
 		sloppyPanel.add(webLabel, gbc);
 
-        webTextBox.setText("http://");
+        webTextBox.setText("http://"); //$NON-NLS-1$
 		gbc.gridy=1;
 		gbc.fill=GridBagConstraints.HORIZONTAL;
 		gbc.weightx=0.2;
@@ -503,7 +506,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		
 		// 2.  The bandwidth label and drop down
 
-        bandwidthLabel.setText("2. Select the connection speed to simulate");
+        bandwidthLabel.setText(Messages.getString("prompt.selectSpeed")); //$NON-NLS-1$
 		gbc.fill=GridBagConstraints.NONE;
 		gbc.gridy=3;
 		gbc.insets = defaultGap;
@@ -524,13 +527,13 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 
 		gbc.gridy=6;
 		gbc.insets = defaultGap;
-        startLabel.setText("3. Press 'Go' to view the site with sloppy");
+        startLabel.setText(Messages.getString("prompt.launch")); //$NON-NLS-1$
         sloppyPanel.add(startLabel, gbc);
 
         gbc.gridy = 7;        
 		gbc.insets = bottomGap;
-        startButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/dallaway/sloppy/resources/play16x16.gif")));
-        startButton.setText("Go");
+        startButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/dallaway/sloppy/resources/play16x16.gif"))); //$NON-NLS-1$
+        startButton.setText(Messages.getString("button.launch")); //$NON-NLS-1$
 		sloppyPanel.add(startButton, gbc);
 
         startButton.addActionListener(new java.awt.event.ActionListener() 
@@ -554,13 +557,13 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 
    private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) 
    {
-		debug("Apply pressed");
+		debug("Apply pressed"); //$NON-NLS-1$
 
 		// Get the new port number:
 		String portText = portTextBox.getText();
 		if (portText == null)
 		{
-			error("Please specify a port number");
+			error(Messages.getString("error.noPort")); //$NON-NLS-1$
 			return;	
 		}
 		
@@ -571,7 +574,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		}
 		catch (NumberFormatException nfx)
 		{
-			error("Bad port number");
+			error(Messages.getString("error.badPort")); //$NON-NLS-1$
 			return;	
 		}
 		
@@ -584,29 +587,29 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		
 		
 		// If we get here, we need to restart the listener/server.
-		JDialog progress = new JDialog(this, "Please wait", false);
+		JDialog progress = new JDialog(this, Messages.getString("info.wait"), false); //$NON-NLS-1$
 		progress.getContentPane().setLayout( new GridBagLayout());
 		JPanel panel = new JPanel(new GridBagLayout());
 		progress.getContentPane().add(panel);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5,5,5,5);
 		gbc.anchor = GridBagConstraints.CENTER;
-		panel.add(new JLabel("Restarting Sloppy..."), gbc);
+		panel.add(new JLabel(Messages.getString("info.restarting")), gbc); //$NON-NLS-1$
 		progress.setSize(100,50);
 		progress.setLocationRelativeTo(this);
 		progress.pack();
-		progress.show();
+		progress.setVisible(true);
 
-		debug("Stopping");
+		debug("Stopping"); //$NON-NLS-1$
 		conf.getServer().stop();
 
-		debug("Starting");
+		debug("Starting"); //$NON-NLS-1$
 		conf.setLocalPort(port);
 		Thread thread = new Thread(conf.getServer());
 		thread.start();
 		
-		debug("Disposing of please wait message");				
-		progress.hide();
+		debug("Disposing of please wait message");				 //$NON-NLS-1$
+		progress.setVisible(false);
 		progress.dispose();
 		
 		// Update the about text to show the change in port:
@@ -642,7 +645,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt)
     {
-       	debug("Go button pressed");
+       	debug("Go button pressed"); //$NON-NLS-1$
 
 		// Check for a good URL from the user.
 		if (updateDestination() == false)
@@ -654,14 +657,14 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		// Make sure the server code is running:
 		if (conf.getServer().isRunning() == false)
 		{
-			error("Sloppy is not ready. Try changing the port number in options");
+			error(Messages.getString("error.noRunning")); //$NON-NLS-1$
 			return;
 		}
 
 		// Open the browser:
        	if (!showDocument())
        	{
-       		error("Unable to launch browser");
+       		error(Messages.getString("error.cannotLaunchBrowser")); //$NON-NLS-1$
        	}
        
     }
@@ -689,7 +692,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 
        if (url == null)
        {
-			error("Address not set");
+			error(Messages.getString("error.noAddress")); //$NON-NLS-1$
 			return false;
        }
 
@@ -699,7 +702,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
        if (destination == null)
        {
        		// The destination can't be parsed as a good URL
-			error("Bad destination address");
+			error(Messages.getString("error.badAddress")); //$NON-NLS-1$
 			return false;
        }
 
@@ -739,9 +742,9 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 			// The URL entered by the user isn't valid.
 			
 			// One common misunderstanding might be to miss off the protocol:
-			if (!url.startsWith("http://"))
+			if (!url.startsWith("http://")) //$NON-NLS-1$
 			{
-				toRet = clean("http://" + url);	
+				toRet = clean("http://" + url);	 //$NON-NLS-1$
 			}
 	
 		}
@@ -778,7 +781,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 */
 	public void error(String message, Exception ex)
 	{
-		JOptionPane.showMessageDialog(this, message + "\n" + ex, "Error", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, message + "\n" + ex, Messages.getString("error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		if (debug)
 		{
 			ex.printStackTrace(System.err);	
@@ -790,7 +793,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 */
 	public void error(String message)
 	{
-		JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, message, Messages.getString("error.title"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$
 		
 	}
 
@@ -822,7 +825,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 */
 	private boolean showDocument() 
 	{		
-		String urlString = "http://127.0.0.1:"+conf.getLocalPort()+conf.getDestination().getFile();
+		String urlString = "http://127.0.0.1:"+conf.getLocalPort()+conf.getDestination().getFile(); //$NON-NLS-1$
 		try 
 		{
 			// The address we want to open:
@@ -833,7 +836,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		catch (MalformedURLException mx)
 		{
 			// Here if 127.0.0.1 is a bad URL. This will, of course, Never Happen
-			error("Unable to open "+urlString);
+			error(Messages.getString("error.openBrowserFailed")+urlString); //$NON-NLS-1$
 			return false;
 		}
     } 		
@@ -846,12 +849,12 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 * @return	True if the browser was opened; false if there was
 	 * 			any problem such as the JNLP service not available.
 	 */
-	private boolean showDocument(URL url)
+	private boolean showDocument(final URL url)
 	{
 		try 
 		{
 			// Lookup the javax.jnlp.BasicService object
-			BasicService bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
+			BasicService bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService"); //$NON-NLS-1$
 			
 			// Invoke the showDocument method
 			return bs.showDocument(url);
@@ -870,7 +873,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	/**
 	 * @see UserInterface#setDebug(boolean)
 	 */
-	public void setDebug(boolean isDebug)
+	public void setDebug(final boolean isDebug)
 	{
 		this.debug = isDebug;
 	}
@@ -882,11 +885,11 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 	 * 
 	 * @param args Ignored.
 	 */
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
 		Configuration conf = new Configuration();
 		SloppyGUI gui = new SloppyGUI(conf);
-		gui.show();		
+		gui.setVisible(true);
 	}
 
 	/**

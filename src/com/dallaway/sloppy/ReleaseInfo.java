@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -36,7 +36,7 @@ public class ReleaseInfo
 	 */
 	public String getRelease()
 	{
-		return "Sloppy/1.1."+getBuildNumber();
+		return Messages.getString("sloppy.majorVersion")+"."+getBuildNumber(); //$NON-NLS-1$
 	}	
 
 	/**
@@ -48,7 +48,7 @@ public class ReleaseInfo
 		Properties props = new Properties();
 		try
 		{
-			InputStream in = getClass().getResourceAsStream("/com/dallaway/sloppy/resources/build.properties");
+			InputStream in = getClass().getResourceAsStream("/com/dallaway/sloppy/resources/build.properties"); //$NON-NLS-1$
 			if (in != null)
 			{
 				props.load(in);
@@ -59,7 +59,7 @@ public class ReleaseInfo
 		{
 			return iox.getMessage();	
 		}
-		return props.getProperty("build.number");
+		return props.getProperty("build.number"); //$NON-NLS-1$
 		
 	}
 
@@ -71,10 +71,9 @@ public class ReleaseInfo
 	public String getCopyright()
 	{
 		return
-			"Sloppy comes with ABSOLUTELY NO WARRANTY. "+
-			"This is free software, and you are welcome to redistribute it "+
-			"under certain conditions. For details see "+
-			"<A href='http://www.dallaway.com/sloppy/license.txt'>the license</A>"; 
+			Messages.getString("license.title")+ //$NON-NLS-1$
+			Messages.getString("license.short"); //$NON-NLS-1$
+
 		
 	}
 	

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  * Utility for logging events, errors and debugging information.
  *
- * This version simply writes to STDOUT and STDERR
+ * This version simply writes to STDOUT and STDERR.
 
  * End user events are date stamped.
  * Notices, errors and debugging lines start with a hash (#).
@@ -36,6 +36,7 @@ import java.util.Date;
  */
 public class ConsoleLogger implements UserInterface
 {
+  private static final long serialVersionUID = -3589118475573004267L;
 
   /** Date to be formated as a common log format. */
   private SimpleDateFormat sdf = new SimpleDateFormat("[dd/MMM/yyyy HH:mm:ss zzzz]");
@@ -51,10 +52,10 @@ public class ConsoleLogger implements UserInterface
    * @param client A string identifying the client.
    * @param msg The message to log.  A time stamp will be included in the output.
    */
-  public void event(String client, String msg)
+  public void event(final String client, final String msg)
   {
 
-    StringBuffer b = new StringBuffer();
+    StringBuilder b = new StringBuilder();
     b.append(client); // E.g., IP address
     b.append(" ");
     b.append(sdf.format(new Date())); // Does this need to be syncronized for SDF?
@@ -72,7 +73,7 @@ public class ConsoleLogger implements UserInterface
    *
    * @param msg The message to write.
    */
-  public void debug(String msg)
+  public void debug(final String msg)
   {
 	if (debug) 
     {
@@ -87,7 +88,7 @@ public class ConsoleLogger implements UserInterface
    *
    * @param msg The message to write.
    */
-  public void notice(String msg)
+  public void notice(final String msg)
   {
     System.out.print("# ");
     System.out.println(msg);
@@ -99,7 +100,7 @@ public class ConsoleLogger implements UserInterface
    *
    * @param msg The message to record.
    */
-  public void error(String msg)
+  public void error(final String msg)
   {
     System.err.print("# ");
     System.err.println(msg);
@@ -112,7 +113,7 @@ public class ConsoleLogger implements UserInterface
    * @param msg The message to write.
    * @param ex Associated exception.
    */
-  public void error(String msg, Exception ex)
+  public void error(final String msg, final Exception ex)
   {
     System.err.print("# ");
     System.err.print(msg);
@@ -134,7 +135,7 @@ public class ConsoleLogger implements UserInterface
    *
    * @param ex Associated exception.
    */
-  public void error(Exception ex)
+  public void error(final Exception ex)
   {
     error(ex.getMessage());
   }
@@ -143,7 +144,7 @@ public class ConsoleLogger implements UserInterface
 	/**
 	 * @see UserInterface#setDebug(boolean)
 	 */
-	public void setDebug(boolean isDebug)
+	public void setDebug(final boolean isDebug)
 	{
 		this.debug = isDebug;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -52,7 +52,7 @@ public class Usage
 	 * Number of milliseconds between requests until we 
 	 * considerour data to be stale.
 	 */
- 	private static final long MIN_MARK_INTERVAL = 1000 * 5;
+ 	private static final long MIN_MARK_INTERVAL = 1000L * 5;
 
 
   /**
@@ -60,7 +60,7 @@ public class Usage
    *
    * @param n The number of bytes exchanged.
    */
-  public void increment(int n)
+  public void increment(final int n)
   {
     totalBytes += n;
   }
