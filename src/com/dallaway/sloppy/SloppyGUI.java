@@ -234,8 +234,10 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		about.append("<p><b>").append(release.getRelease()).append("</b></p>"); //$NON-NLS-1$ //$NON-NLS-2$
 		about.append("<p>").append( release.getCopyright()).append("</p>");				 //$NON-NLS-1$ //$NON-NLS-2$
 
-		about.append("<p>").append(Messages.getString("credit.logo1")).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
+		about.append("<p>").append(Messages.getString("credit.artwork"));
+        about.append("<a href='http://woadtoad.com'>Joanna Kleinschmidt</a>");
+        about.append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+         
      
 		about.append("<p>"); //$NON-NLS-1$
         about.append(Messages.getString("bugReports")); //$NON-NLS-1$

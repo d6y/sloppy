@@ -2,7 +2,7 @@
 
 <jnlp 
 	spec="1.0+"   
-	codebase="file:d:/eclipse/workspace/sloppy" 
+	codebase="file:///Users/richard/Developer/workspace/spiralarm/sloppy" 
 	href="local.jnlp">
   <information>
     <title>Sloppy</title>
