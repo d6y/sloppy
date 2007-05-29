@@ -21,6 +21,7 @@ package com.dallaway.sloppy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -32,11 +33,11 @@ import java.util.Properties;
 public class ReleaseInfo
 {
 	/**
-	 * @return An identifying label for this release.
+	 * @return an identifying label for this release.
 	 */
 	public String getRelease()
 	{
-		return Messages.getString("sloppy.majorVersion")+"."+getBuildNumber(); //$NON-NLS-1$
+        return Messages.getString("sloppy.majorVersion")+"."+getBuildNumber() + " ("+Locale.getDefault()+")"; //$NON-NLS-1$
 	}	
 
 	/**

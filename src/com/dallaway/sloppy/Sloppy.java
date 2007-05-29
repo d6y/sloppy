@@ -51,7 +51,10 @@ public class Sloppy
    */
   public static void main(final String[] args) 
   {
-
+      // Useful for testing different languages
+      // Locale.setDefault(new Locale("bg"));
+     
+      
 	/*
 	 * Set up proxy if web start tells us we're using a proxy.
 	 * 

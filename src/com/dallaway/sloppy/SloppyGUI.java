@@ -138,7 +138,7 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
      * 
      * @param	conf	The system configuration/settings.
      */
-    public SloppyGUI(Configuration conf) 
+    public SloppyGUI(final Configuration conf) 
     {
     	
     	this.conf = conf;
@@ -149,8 +149,8 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
         int n = kiloBitesPerSecond.length;
         Bandwidth[] bandwidthOptions = new Bandwidth[n];
         
-		// Which option should we select by default?  Default to the second one (28.8k).
-        int selectedIndex = 2;
+		// Which option should we select by default?  Default to the third one (56k).
+        int selectedIndex = 3;
         
         for(int i=0; i<n; i++)
         {
@@ -193,8 +193,8 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		// Set the icon for the app:
       	setIconImage(new ImageIcon(getClass().getResource(ICON16)).getImage());
 
-		// Extra height to see information in the "About" panel:
-		setSize(350,400);
+		// Default window size:
+		setSize(380,400);
 		
 		// For proxy authentication:
 		//Authenticator.setDefault(new GUIAuthenticator());
@@ -234,10 +234,18 @@ public class SloppyGUI extends javax.swing.JFrame implements UserInterface, Hype
 		about.append("<p><b>").append(release.getRelease()).append("</b></p>"); //$NON-NLS-1$ //$NON-NLS-2$
 		about.append("<p>").append( release.getCopyright()).append("</p>");				 //$NON-NLS-1$ //$NON-NLS-2$
 
-		about.append("<p>").append(Messages.getString("credit.artwork"));
-        about.append("<a href='http://woadtoad.com'>Joanna Kleinschmidt</a>");
-        about.append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        // credit the logo creation:
+		about.append("<p>"); //$NON-NLS-1$ 
+        about.append(Messages.getString("credit.artwork")); //$NON-NLS-1$ 
+        about.append("<a href='http://woadtoad.com'>Joanna Kleinschmidt</a>, "); //$NON-NLS-1$ 
+        about.append("<a href='http://www.shshweb.com'>Shsh Web Design</a>");    //$NON-NLS-1$ s
+        about.append("</p>"); //$NON-NLS-1$ 
          
+        // credit the translators:
+        about.append("<p>");
+        about.append(Messages.getString("credit.tranlation"));
+        about.append(Messages.getString("credit.translatorNames"));
+        about.append("</p>"); 
      
 		about.append("<p>"); //$NON-NLS-1$
         about.append(Messages.getString("bugReports")); //$NON-NLS-1$
