@@ -17,20 +17,19 @@
  * along with Sloppy; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.dallaway.sloppy.test;
+package com.dallaway.sloppy;
 
-import com.dallaway.sloppy.SloppyGUI;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 /**
  * Test of some of the helper methods in the Sloppy GUI.
  * 
- * @author	$Author$
- * @version $Revision$ $Date$
+ * @author	$Author:dallaway $
+ * @version $Revision:12 $ $Date:2007-05-26 17:45:22 +0100 (Sat, 26 May 2007) $
  */
-public class TestSloppyGUI extends TestCase
+public class TestSloppyGUI 
 {
 
 
@@ -38,7 +37,7 @@ public class TestSloppyGUI extends TestCase
 	 * Test of the helper used to clean up URLs entered
 	 * by end users.
 	 */
-	public void testURLCleanUP()
+	@Test public void testURLCleanUP()
 	{
 		// A valid URL
 		assertEquals("http://www.newscientist.com/", SloppyGUI.clean("http://www.newscientist.com/").toExternalForm());
@@ -48,29 +47,5 @@ public class TestSloppyGUI extends TestCase
 			
 	}
 
-	/**
-	 * @see junit.framework.TestCase#TestCase(java.lang.String)
-	 */
-	public TestSloppyGUI(String name)
-	{
-		super(name);
-	}
 	
-	/**
-	 * @return This test as a suite.
-	 */
-	public static TestSuite suite()
-	{
-		return new TestSuite(TestSloppyGUI.class);	
-	}
-
-	/**
-	 * Runs this test suit using JUnit's text UI.
-	 * 
-	 * @param	args	Ignored.
-	 */
-	public static void main(String[] args)
-	{
-		junit.textui.TestRunner.run(suite());
-	}
 }

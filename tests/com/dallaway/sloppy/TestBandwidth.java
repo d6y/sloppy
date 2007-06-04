@@ -17,27 +17,24 @@
  * along with Sloppy; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.dallaway.sloppy.test;
+package com.dallaway.sloppy;
 
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import com.dallaway.sloppy.Bandwidth;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Test of the bandwidth class.
  * 
- * @author $Author$
- * @version $Revision$ $Date$
+ * @author $Author:dallaway $
+ * @version $Revision:12 $ $Date:2007-05-26 17:45:22 +0100 (Sat, 26 May 2007) $
  */
-public class TestBandwidth extends TestCase
+public class TestBandwidth 
 {
 
 	/**
 	 * Test of the 28.8k bandwidth object.
 	 */
-	public void test28()
+	@Test public void test28()
 	{
 		Bandwidth bw = new Bandwidth(28.8f);
 		
@@ -50,7 +47,7 @@ public class TestBandwidth extends TestCase
 	/**
 	 * Test of the 512k bandwidth object.
 	 */
-	public void test512()
+	@Test public void test512()
 	{
 		Bandwidth bw = new Bandwidth(512.0f);
 		
@@ -61,29 +58,5 @@ public class TestBandwidth extends TestCase
 	}
 
 
-	/**
-	 * @see junit.framework.TestCase#TestCase(java.lang.String)
-	 */
-	public TestBandwidth(String name)
-	{
-		super(name);
-	}
-
-	/**
-	 * @return This test as a suite.
-	 */
-	public static TestSuite suite()
-	{
-		return new TestSuite(TestBandwidth.class);	
-	}
-
-	/**
-	 * Runs this test suit using JUnit's text UI.
-	 * 
-	 * @param	args	Ignored.
-	 */
-	public static void main(String[] args)
-	{
-		junit.textui.TestRunner.run(suite());
-	}
+	
 }

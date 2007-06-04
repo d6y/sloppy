@@ -29,8 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * All requests are handed off to an instance of this class for co-ordinating
@@ -163,7 +161,7 @@ public class SlowProxyThread extends Thread
 		String file = firstLine.substring(space+1, space2); // The file being requested
 
 		// Read the rest of the message from the web browser:
-		HashMap<String, String> headers = readHeaders(inFromWebBrowser);
+		Headers headers = Headers.readFrom(inFromWebBrowser);
 		String requestBody = readBody(inFromWebBrowser);
 
 		bottleneck.mark(); // mark an event, to record elapse time.
@@ -324,21 +322,11 @@ public class SlowProxyThread extends Thread
 	 * @param	body	The body to send to the web server.
 	 * @throws IOException	if there was a problem communicating with the web server.
 	 */
-	private void sendRequest(final HttpURLConnection con, final HashMap<String, String> headers, final String body) throws IOException
+	private void sendRequest(final HttpURLConnection con, final Headers headers, final String body) throws IOException
 	{
 
-		// Send the headers:	
-        for(Map.Entry<String,String> entry: headers.entrySet())
-        {
-            String name = entry.getKey();
-			// Host is already set {@see getConnection}, and we don't want to do Keep-Alive
-			if (!"Host".equalsIgnoreCase(name) && !"Connection".equalsIgnoreCase(name))
-			{
-				String value = entry.getKey();
-				ui.debug("> "+name+"="+value);
-				con.setRequestProperty(name, value);	
-			}
-		}
+        headers.writeTo(con);
+		
 
 		// Send the body (just opening the conenction
 		// seems to make some web servers think you're
@@ -432,41 +420,6 @@ public class SlowProxyThread extends Thread
 	}
 
 
-	/**
-	 * Read the HTTP headers from the web browser.
-	 * 
-	 * @param r The input from the web browser.
-	 * @return A hashtable of name/value pairs.
-	 * @throws IOException	if there was a problem reading from the web browers.
-	 */
-	private HashMap<String, String> readHeaders(final BufferedReader r) throws IOException
-	{	
-		HashMap<String, String> toRet = new HashMap<String, String>();
-		
-		String line = r.readLine();
-		while (line != null && !"".equals(line))
-		{
-			// Headers look like "Name: value"
-	
-			int colon = line.indexOf(": ");
-			if (colon == -1)
-			{
-				toRet.put(line, "");
-			}
-			else
-			{
-				String name = line.substring(0, colon);
-				String value = line.substring(colon+2); // +2 to get past the space
-				toRet.put(name, value);
-			}
-
-			line = r.readLine();
-		}
-
-
-		return toRet;
-			
-	}
 	
 	
 	/**
