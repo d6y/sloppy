@@ -37,6 +37,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="tabs">
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="aboutSelected"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -273,6 +276,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="about_pane">
                   <Properties>
+                    <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
                     <Property name="editable" type="boolean" value="false"/>
                   </Properties>
                 </Component>

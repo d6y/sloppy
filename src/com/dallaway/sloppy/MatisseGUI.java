@@ -47,6 +47,10 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         this.conf = conf;
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource(ICON16)).getImage());
+        
+        // Set the focus on the URL, with the cursor at the end of the address:
+        url_textfield.requestFocus();
+        url_textfield.setCaretPosition(url_textfield.getText().length());
          
         
     }
@@ -81,6 +85,12 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/dallaway/sloppy/messages"); // NOI18N
         setTitle(bundle.getString("name")); // NOI18N
         setName("main_frame"); // NOI18N
+
+        tabs.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                aboutSelected(evt);
+            }
+        });
 
         address_label.setText(bundle.getString("prompt.enterUrl")); // NOI18N
 
@@ -193,6 +203,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         about_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/dallaway/sloppy/resources/sloppy_logo64.png"))); // NOI18N
 
+        about_pane.setContentType("text/html"); // NOI18N
         about_pane.setEditable(false);
         about_scroller.setViewportView(about_pane);
 
@@ -245,6 +256,12 @@ private void connection_speed_optionsActionPerformed(java.awt.event.ActionEvent 
 private void port_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_port_textfieldActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_port_textfieldActionPerformed
+
+/** Update the "about text" when the tab is selected. */
+private void aboutSelected(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_aboutSelected
+    about_pane.setText(new AboutText(conf, (Bandwidth)(connection_speed_options.getSelectedItem())).toString());
+    about_pane.setCaretPosition(0);
+}//GEN-LAST:event_aboutSelected
 
   
 

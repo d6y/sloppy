@@ -34,7 +34,13 @@ public class AboutText
     // The text created in the constructor.
     private String text;
 
-    public AboutText(Configuration conf, Bandwidth bw)
+    @Override
+    public String toString()
+    {
+        return this.text;
+    }
+    
+    public AboutText(final Configuration conf, final Bandwidth bw)
     {
         StringBuilder about = new StringBuilder();
 
@@ -66,9 +72,8 @@ public class AboutText
         append(about, "Machine", new String[] { "os.name", "os.version", "os.arch"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         append(about, "Web Start", new String[] {"javawebstart.version", "jnlpx.home", "jnlpx.jvm"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         append(about, "VM", new String[] { "java.vm.name", "java.vm.version", "java.vm.vendor" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        append(about, "Proxy:", new String[] { "proxyHost", "proxyPort" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-
+        append(about, "Proxy", new String[] { "proxyHost", "proxyPort" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        
         about.append("<p>").append("Port: ").append(conf.getLocalPort()).append("</p>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         about.append("<p>").append("Bandwidth: ").append(conf.getBytesPerSecond()); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -108,10 +113,26 @@ public class AboutText
     private void append(final StringBuilder buffer, final String title, final String[] keys)
     {
         buffer.append("<p>").append(title).append(": "); //$NON-NLS-1$ //$NON-NLS-2$
+        
+        StringBuilder values = new StringBuilder();
+        boolean non_null_found = false;       
+        
         for (String key : keys)
         {
-            buffer.append(System.getProperty(key)).append(" "); //$NON-NLS-1$
+            String value = System.getProperty(key);
+            non_null_found = non_null_found || value!=null;
+            values.append(value).append(" "); //$NON-NLS-1$
         }
+        
+        if (non_null_found)
+        {
+            buffer.append(values.toString());
+        }
+        else
+        {
+            buffer.append("Not set");
+        }
+        
         buffer.append("</p>"); //$NON-NLS-1$
     }
 }
