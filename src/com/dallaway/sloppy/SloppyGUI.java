@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -50,6 +50,7 @@ import javax.swing.event.HyperlinkListener;
  * 
  * @author $Author$
  * @version $Revision$ $Date$
+ * @deprecated in favavour of {@link MatisseGUI}.
  */
 public class SloppyGUI extends javax.swing.JFrame implements UserInterface, HyperlinkListener
 {

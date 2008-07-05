@@ -8,12 +8,14 @@
     <title>Sloppy</title>
     <vendor>Richard Dallaway</vendor>
     <homepage href="index.html" />
-    <description>Sloppy allows you to similate different dial-up connection speeds.</description>
-	<description kind="short">Sloppy simulates dial-up speeds</description>
-	
-	<!-- Bulgarian -->
-	<description locale="bg">Sloppy позволява да симулирате различни скорости на dial-up връзка.</description>
-	<description kind="short" locale="bg">Sloppy симулира dial-up скорости</description>
+    
+    <!-- English, default language -->
+    <description>Sloppy allows you to similate different connection speeds.</description>
+    <description kind="short">Sloppy simulates connection speeds</description>
+
+    <!-- Bulgarian -->
+    <description locale="bg">Sloppy позволява да симулирате различни скорости на dial-up връзка.</description>
+    <description kind="short" locale="bg">Sloppy симулира dial-up скорости</description>
 
     <icon href="img/sloppy_logo.gif" width="133" height="134"/>
     <icon href="img/sloppy_32.gif" width="32" height="32"/>

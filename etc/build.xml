@@ -4,7 +4,7 @@
 <target name="init" description="Set up properties for the build">
 	<property description="Path to the Jar containing JNLP" 
 		name="jnlp.lib" 
-		value="/Applications/Utilities/Java/Java Web Start.app/Contents/MacOS/javaws.jar" />
+		value="/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/javaws.jar" />
 </target>
 	
 <!-- Build a new release of Sloppy -->
