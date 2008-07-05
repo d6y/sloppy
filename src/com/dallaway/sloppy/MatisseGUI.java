@@ -170,6 +170,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         port_label.setText(bundle.getString("prompt.port")); // NOI18N
 
+        port_textfield.setText(Integer.toString(conf.getLocalPort()));
         port_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 port_textfieldActionPerformed(evt);

@@ -209,6 +209,11 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="port_textfield">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="Integer.toString(conf.getLocalPort())" type="code"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="port_textfieldActionPerformed"/>
               </Events>
