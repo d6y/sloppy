@@ -209,11 +209,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="port_textfield">
-              <Properties>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="com/dallaway/sloppy/messages.properties" key="MatisseGUI.port_textfield.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                </Property>
-              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="port_textfieldActionPerformed"/>
               </Events>
@@ -246,7 +241,7 @@
                       <Component id="about_logo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="316" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="about_scroller" alignment="0" pref="400" max="32767" attributes="0"/>
+                  <Component id="about_text_scroller" alignment="0" pref="400" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -254,7 +249,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="about_logo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="about_scroller" pref="223" max="32767" attributes="0"/>
+                      <Component id="about_text_scroller" pref="223" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -267,18 +262,21 @@
                 </Property>
               </Properties>
             </Component>
-            <Container class="javax.swing.JScrollPane" name="about_scroller">
+            <Container class="javax.swing.JScrollPane" name="about_text_scroller">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextPane" name="about_pane">
+                <Component class="javax.swing.JEditorPane" name="about_pane">
                   <Properties>
                     <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
                     <Property name="editable" type="boolean" value="false"/>
                   </Properties>
+                  <AccessibilityProperties>
+                    <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="text/plain" noResource="true"/>
+                  </AccessibilityProperties>
                 </Component>
               </SubComponents>
             </Container>

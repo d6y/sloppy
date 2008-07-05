@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -35,347 +35,342 @@ import javax.jnlp.ServiceManager;
 import javax.jnlp.UnavailableServiceException;
 
 /**
- * Wrapper for the various properties of the 
- * application, such as port number to listen
- * on.  This class acts as a meeting place
- * between the user interface (graphical or
- * non-graphical) and the server code.
+ * Wrapper for the various properties of the application, such as port number
+ * to listen on.  This class acts as a meeting place between the user 
+ * interface (graphical or non-graphical) and the server code.
  * 
- * @author	$Author$
+ * It also knows how to save itself to disk in the JNLP
+ * environment via the load and save muffins methods.
+ * 
+ * @author $Author$
  * @version $Revision$ $Date$
  */
 public class Configuration implements Serializable
 {
+
     private static final long serialVersionUID = 117056425192351479L;
-
+    
     /** The port we listen on by default */
-	public static final int DEFAULT_LISTEN_PORT = 7569;
-	
-	/** Default bandwidth to simulate */
-	public static final int DEFAULT_BYTES_PER_SECOND = 3225;
-	
-	/** The bandwidth we want to limit to. */
-	private int bytesPerSecond;
-	
-	/** The address we're proxying to. **/
-	private URL destination;
-	
-	/** The local port we're listening on. */
-	private int localPort;
-	
-	/** For messages back to the user, which by default will output to the console. */
-	private UserInterface ui = new ConsoleLogger();
-	
-	/** The server handling the HTTP requests. */
-	private SloppyServer server;
+    public static final int DEFAULT_LISTEN_PORT = 7569;
+    
+    /** Default bandwidth to simulate */
+    public static final int DEFAULT_BYTES_PER_SECOND = 3225;
+    
+    /** The bandwidth we want to limit to. */
+    private int bytesPerSecond;
+    
+    /** The address we're proxying to. **/
+    private URL destination;
+    
+    /** The local port we're listening on. */
+    private int localPort;
+    
+    /** For messages back to the user, which by default will output to the console. */
+    private UserInterface ui = new ConsoleLogger();
+    
+    /** The server handling the HTTP requests. */
+    private SloppyServer server;
+    
+    /** Name of the setting in the properties file for the bandwidth */
+    private static final String BYTES_KEY = "sloppy.bytesPerSecond"; //$NON-NLS-1$
+    
+    /** The names of the property for the port to listen on. */
+    private static final String PORT_KEY = "sloppy.listenPort"; //$NON-NLS-1$
+    
+    /** The name of the property for the URL to proxy to. */
+    private static final String DESTINATION_KEY = "sloppy.desintationURL"; //$NON-NLS-1$
+    
+    /** Amount of space (bytes) we need in the web cache for config. */
+    private static final long MUFFIN_SIZE = 2048;
 
-	
-	/** Name of the setting in the properties file for the bandwidth */
-	private static final String BYTES_KEY = "sloppy.bytesPerSecond"; //$NON-NLS-1$
+    /**
+    * Create a configuration with default (factory) settings.
+     * This configuration has no destination set.
+     */
+    public Configuration()
+    {
+        this.bytesPerSecond = DEFAULT_BYTES_PER_SECOND;
+        this.destination = null;
+        this.localPort = DEFAULT_LISTEN_PORT;
+    }
 
-	/** The names of the property for the port to listen on. */
-	private static final  String PORT_KEY = "sloppy.listenPort"; //$NON-NLS-1$
-	
-	/** The name of the property for the URL to proxy to. */
-	private static final String DESTINATION_KEY = "sloppy.desintationURL"; //$NON-NLS-1$
+    /**
+     * Construct a new configuration using the values supplied
+     * in the properties.  For any missing properties, default
+     * values are used.
+     * 
+     * The properties are:
+     * <ul>
+     * <li> sloppy.bytesPerSecond </li>
+     * <li> sloppy.destinationURL </li>
+     * <li> sloppy.listenPort </li>
+     * </ul>
+     * 
+     * 
+     * @param	props	A properties file containing zero, one or
+     * 					more settings for sloppy.
+     * 
+     * @throws MalformedURLException  if the destination URL is bad.
+     */
+    public Configuration(Properties props) throws MalformedURLException
+    {
+        this();	// Take the default values
+        init(props);
+    }
 
-	/** Amount of space (bytes) we need in the web cache for config. */
-	private static final long MUFFIN_SIZE = 2048;
+    /**
+     * Initialize the settings from any values found in the supplied
+     * properties. 
+     * 
+     * @param	props	Properties to read from.
+     * 
+     * @throws MalformedURLException  if the destination URL is bad.
+     */
+    private void init(final Properties props) throws MalformedURLException
+    {
+        String value = (String) props.get(BYTES_KEY);
+        if (value != null)
+        {
+            this.bytesPerSecond = Integer.parseInt(value);
+        }
 
+        value = (String) props.get(PORT_KEY);
+        if (value != null)
+        {
+            this.localPort = Integer.parseInt(value);
+        }
 
-	/**
-	 * Create a configuration with default (factory) settings.
-	 * This configuration has no destination set.
-	 */
-	public Configuration()
-	{
-		this.bytesPerSecond = DEFAULT_BYTES_PER_SECOND;
-		this.destination = null;
-		this.localPort = DEFAULT_LISTEN_PORT;
-	}
+        value = (String) props.get(DESTINATION_KEY);
+        if (value != null)
+        {
+            this.destination = new URL(value);
+        }
 
-	/**
-	 * Construct a new configuration using the values supplied
-	 * in the properties.  For any missing properties, default
-	 * values are used.
-	 * 
-	 * The properties are:
-	 * <ul>
-	 * <li> sloppy.bytesPerSecond
-	 * <li> sloppy.destinationURL
-	 * <li> sloppy.listenPort
-	 * </ul>
-	 * 
-	 * 
-	 * @param	props	A properties file containing zero, one or
-	 * 					more settings for sloppy.
-	 * 
-	 * @throws MalformedURLException  if the destination URL is bad.
-	 */
-	public Configuration(Properties props) throws MalformedURLException
-	{
-		this();	// Take the default values
-		init(props);			
-	}	
+    }
 
+    /**
+     * Update the configuration information from any muffins stored
+     * in the Web Start cache.
+     */
+    public void loadMuffins()
+    {
+        ui.debug("Loading muffins"); //$NON-NLS-1$
 
-	/**
-	 * Initialize the settings from any values found in the supplied
-	 * properties. 
-	 * 
-	 * @param	props	Properties to read from.
-	 * 
-	 * @throws MalformedURLException  if the destination URL is bad.
-	 */
-	private void init(final Properties props) throws MalformedURLException
-	{
-	    String value = (String)props.get(BYTES_KEY);
-    	if (value != null) 
-    	{
-    		this.bytesPerSecond = Integer.parseInt(value);
-    	}
+        PersistenceService ps = null;
+        BasicService bs = null;
 
-	    value = (String)props.get(PORT_KEY);
-    	if (value != null) 
-    	{
-    		this.localPort = Integer.parseInt(value);
-    	}
+        try
+        {
+            ps = (PersistenceService) ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
+            bs = (BasicService) ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
+        }
+        catch (UnavailableServiceException e)
+        {
+            ui.error(Messages.getString("error.failedToLoadSavedSettings"), e); //$NON-NLS-1$
+            return;
+        }
 
-    	value = (String)props.get(DESTINATION_KEY);
-    	if (value != null) 
-    	{
-    		this.destination = new URL(value);
-    	}
-		
-	}
+        // We store a properties file in the "configuration" address.
+        try
+        {
+            URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
+            FileContents contents = getOrCreateFile(ps, config);
+            if (contents == null)
+            {
+                return;
+            }
 
+            InputStream in = contents.getInputStream();
+            Properties props = new Properties();
+            props.load(in);
+            in.close();
 
-	/**
-	 * Update the configuration information from any muffins stored
-	 * in the Web Start cache.
-	 */
-	public void loadMuffins()
-	{
-		ui.debug("Loading muffins"); //$NON-NLS-1$
+            init(props);
+        }
+        catch (IOException iox)
+        {
+            ui.debug("Failed to read muffins: " + iox);	 //$NON-NLS-1$
+        }
 
-		PersistenceService ps = null; 
-    	BasicService bs = null; 
+    }
 
-    	try 
-    	{ 
-        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
-    	} 
-    	catch (UnavailableServiceException e) 
-    	{ 
-    		ui.error(Messages.getString("error.failedToLoadSavedSettings"), e); //$NON-NLS-1$
-    		return;
-	    } 	
-	    	    
-	    // We store a properties file in the "configuration" address.
-	    try
-	    {
-		    URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
-			FileContents contents = getOrCreateFile(ps, config);
-			if (contents == null)
-			{
-				return;	
-			}
-						
-			InputStream in =  contents.getInputStream();	    		
-			Properties props = new Properties();
-			props.load(in);
-			in.close();
-			
-			init(props);
-	    }
-	    catch (IOException iox)
-	    {
-	    	ui.debug("Failed to read muffins: "+ iox);	 //$NON-NLS-1$
-	    }
+    /**
+     * Fetch the muffin stored at the given address in the Java Web Start cache, or
+     * create it if it does not exist.
+     * 
+     * @param	ps		The persistance service to use.
+     * @param	address	The address to lookup.
+     * @return The file contents at the address.
+     * @throws IOException	if there was a problem reading the muffin.
+     */
+    private FileContents getOrCreateFile(final PersistenceService ps, final URL address) throws IOException
+    {
+        ui.debug("Muffin lookup"); //$NON-NLS-1$
+        FileContents toRet = null;
+        try
+        {
+            toRet = ps.get(address);
 
-	}
+            // See if the stream exists:
+            InputStream in = toRet.getInputStream();
+            in.close();
+        }
+        catch (FileNotFoundException fnf)
+        {
+            ui.debug("Creating muffins"); //$NON-NLS-1$
+            // Doesn't exist, so create:
+            long sizeAllocated = ps.create(address, MUFFIN_SIZE);
+            if (sizeAllocated < MUFFIN_SIZE)
+            {
+                ui.debug("Asked for " + MUFFIN_SIZE + " bytes; was allocated " + sizeAllocated);	 //$NON-NLS-1$ //$NON-NLS-2$
+            }
+            toRet = ps.get(address);
+        }
 
+        return toRet;
+    }
 
-	/**
-	 * Fetch the muffin stored at the given address in the Java Web Start cache, or
-	 * create it if it does not exist.
-	 * 
-	 * @param	ps		The persistance service to use.
-	 * @param	address	The address to lookup.
-	 * @return The file contents at the address.
-	 * @throws IOException	if there was a problem reading the muffin.
-	 */
-	private FileContents getOrCreateFile(final PersistenceService ps, final URL address) throws IOException
-	{
-		ui.debug("Muffin lookup"); //$NON-NLS-1$
-		FileContents toRet = null;
-		try
-		{
-			toRet = ps.get(address);
-			
-			// See if the stream exists:
-			InputStream in = toRet.getInputStream();
-			in.close();
-		}
-		catch (FileNotFoundException fnf)
-		{
-			ui.debug("Creating muffins"); //$NON-NLS-1$
-			// Doesn't exist, so create:
-			long sizeAllocated = ps.create(address, MUFFIN_SIZE);	
-			if (sizeAllocated < MUFFIN_SIZE)
-			{
-				ui.debug("Asked for "+MUFFIN_SIZE+" bytes; was allocated "+sizeAllocated);	 //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			toRet = ps.get(address);
-		}
-			
-		return toRet;
-	}
+    /**
+     * Save the current configuration information.
+     */
+    public void saveMuffins()
+    {
+        ui.debug("Saving muffins"); //$NON-NLS-1$
 
-	/**
-	 * Save the current configuration information.
-	 */
-	public void saveMuffins()
-	{
-		ui.debug("Saving muffins"); //$NON-NLS-1$
+        PersistenceService ps = null;
+        BasicService bs = null;
 
-		PersistenceService ps = null; 
-    	BasicService bs = null; 
+        try
+        {
+            ps = (PersistenceService) ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
+            bs = (BasicService) ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
+        }
+        catch (UnavailableServiceException e)
+        {
+            ui.error(Messages.getString("error.failedToSaveSettings"), e); //$NON-NLS-1$
+            return;
+        }
 
-    	try 
-    	{ 
-        	ps = (PersistenceService)ServiceManager.lookup("javax.jnlp.PersistenceService");  //$NON-NLS-1$
-        	bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");  //$NON-NLS-1$
-    	} 
-    	catch (UnavailableServiceException e) 
-    	{ 
-    		ui.error(Messages.getString("error.failedToSaveSettings"), e); //$NON-NLS-1$
-    		return;
-	    } 	
-	    	    
-	    // We store a properties file in the "configuration" address.
-	    try
-	    {
-		    URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
-			FileContents contents = getOrCreateFile(ps, config);
-			if (contents == null)
-			{
-				return;	
-			}
+        // We store a properties file in the "configuration" address.
+        try
+        {
+            URL config = new URL(bs.getCodeBase(), "configuration"); //$NON-NLS-1$
+            FileContents contents = getOrCreateFile(ps, config);
+            if (contents == null)
+            {
+                return;
+            }
 
-			// Open for output (true means "overwrite").
-			PrintStream out = new PrintStream( contents.getOutputStream(true) );
-			if (destination != null)
-			{
-				out.println(DESTINATION_KEY + "=" + destination.toExternalForm()); //$NON-NLS-1$
-			}
-			out.println(PORT_KEY + "=" + localPort); //$NON-NLS-1$
-			out.println(BYTES_KEY + "=" + bytesPerSecond); //$NON-NLS-1$
-			out.close();
-			
-	    }
-	    catch (IOException iox)
-	    {
-	    	ui.debug("Failed to write muffins: "+ iox);	 //$NON-NLS-1$
-	    }
+            // Open for output (true means "overwrite").
+            PrintStream out = new PrintStream(contents.getOutputStream(true));
+            if (destination != null)
+            {
+                out.println(DESTINATION_KEY + "=" + destination.toExternalForm()); //$NON-NLS-1$
+            }
+            out.println(PORT_KEY + "=" + localPort); //$NON-NLS-1$
+            out.println(BYTES_KEY + "=" + bytesPerSecond); //$NON-NLS-1$
+            out.close();
 
-	}
+        }
+        catch (IOException iox)
+        {
+            ui.debug("Failed to write muffins: " + iox);	 //$NON-NLS-1$
+        }
 
-	
-	/**
-	 * @return Human-readable version of this configuration object.
-	 */	
-	public String toString()
-	{
-		StringBuffer b = new StringBuffer();
-		b.append("Port=").append(localPort); //$NON-NLS-1$
-		b.append(" Destination=").append(destination); //$NON-NLS-1$
-		b.append(" Bytes per second=").append(bytesPerSecond); //$NON-NLS-1$
-		return b.toString();
-	}
-	
-	/**
-	 * @return Maximum bytes per second.
-	 */
-	public int getBytesPerSecond()
-	{
-		return bytesPerSecond;
-	}
+    }
 
-	/**
-	 * @param bytesPerSecond Maximum bytes per second.
-	 */
-	public void setBytesPerSecond(final int bytesPerSecond)
-	{
-		this.bytesPerSecond = bytesPerSecond;
-	}
+    /**
+     * @return Human-readable version of this configuration object.
+     */
+    @Override public String toString()
+    {
+        StringBuffer b = new StringBuffer();
+        b.append("Port=").append(localPort); //$NON-NLS-1$
+        b.append(" Destination=").append(destination); //$NON-NLS-1$
+        b.append(" Bytes per second=").append(bytesPerSecond); //$NON-NLS-1$
+        return b.toString();
+    }
 
-	/**
-	 * @return The destination URL to proxy to.
-	 */
-	public URL getDestination()
-	{
-		return destination;
-	}
+    /**
+     * @return Maximum bytes per second.
+     */
+    public int getBytesPerSecond()
+    {
+        return bytesPerSecond;
+    }
 
-	/**
-	 * @param destination The address to proxy to.
-	 */
-	public void setDestination(final URL destination)
-	{
-		this.destination = destination;
-	}
+    /**
+     * @param bytesPerSecond Maximum bytes per second.
+     */
+    public void setBytesPerSecond(final int bytesPerSecond)
+    {
+        this.bytesPerSecond = bytesPerSecond;
+    }
 
-	/**
-	 * @return The local port Sloppy listens on.
-	 */
-	public int getLocalPort()
-	{
-		return localPort;
-	}
+    /**
+     * @return The destination URL to proxy to.
+     */
+    public URL getDestination()
+    {
+        return destination;
+    }
 
-	/**
-	 * @param localPort The port that Sloppy listens on.
-	 */
-	public void setLocalPort(final int localPort)
-	{
-		this.localPort = localPort;
-	}
+    /**
+     * @param destination The address to proxy to.
+     */
+    public void setDestination(final URL destination)
+    {
+        this.destination = destination;
+    }
 
-	/**
-	 * @param	ui	The user interface to use for communicating
-	 * 				with the user.
-	 */
-	public void setUserInterface(final UserInterface ui)
-	{
-		this.ui = ui;
-	}
+    /**
+     * @return The local port Sloppy listens on.
+     */
+    public int getLocalPort()
+    {
+        return localPort;
+    }
 
-	/**
-	 * @return	The user interface to use for communicating
-	 * 			with the user.
-	*/
-	public UserInterface getUserInterface()
-	{
-		return this.ui;
-	}
+    /**
+     * @param localPort The port that Sloppy listens on.
+     */
+    public void setLocalPort(final int localPort)
+    {
+        this.localPort = localPort;
+    }
 
-	/**
-	 * @return The server listening for proxy requests.
-	 */
-	public SloppyServer getServer()
-	{
-		return server;
-	}
+    /**
+     * @param	ui	The user interface to use for communicating
+     * 				with the user.
+     */
+    public void setUserInterface(final UserInterface ui)
+    {
+        this.ui = ui;
+    }
 
-	/**
-	 * @param server The server listening for proxy requests.
+    /**
+     * @return	The user interface to use for communicating
+     * 			with the user.
+     */
+    public UserInterface getUserInterface()
+    {
+        return this.ui;
+    }
 
-	 */
-	public void setServer(final SloppyServer server)
-	{
-		this.server = server;
-	}
+    /**
+     * @return The server listening for proxy requests.
+     */
+    public SloppyServer getServer()
+    {
+        return server;
+    }
 
+    /**
+     * @param server The server listening for proxy requests.
+    
+     */
+    public void setServer(final SloppyServer server)
+    {
+        this.server = server;
+    }
 }

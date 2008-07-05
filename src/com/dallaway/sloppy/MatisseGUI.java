@@ -37,21 +37,26 @@ import javax.swing.event.HyperlinkListener;
 public class MatisseGUI extends javax.swing.JFrame implements UserInterface, HyperlinkListener
 {
 
-    private static final String ICON16 = "/com/dallaway/sloppy/resources/sloppy_16.png"; //$NON-NLS-1$
+    
 
     private final Configuration conf;
     
-    /** Creates new form MatisseGUI */
+    /** Create the GUI
+     *
+     * @param conf the configuration object, used to read/write values.
+     */
     public MatisseGUI(final Configuration conf)
     {
         this.conf = conf;
         initComponents();
-        setIconImage(new ImageIcon(getClass().getResource(ICON16)).getImage());
+        
+        // Provide an icon for the window:
+        String icon16 = "/com/dallaway/sloppy/resources/sloppy_16.png"; //$NON-NLS-1$
+        setIconImage(new ImageIcon(getClass().getResource(icon16)).getImage());
         
         // Set the focus on the URL, with the cursor at the end of the address:
-        url_textfield.requestFocus();
         url_textfield.setCaretPosition(url_textfield.getText().length());
-         
+        url_textfield.requestFocus(); 
         
     }
 
@@ -78,8 +83,8 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         apply_button = new javax.swing.JButton();
         about_tab = new javax.swing.JPanel();
         about_logo = new javax.swing.JLabel();
-        about_scroller = new javax.swing.JScrollPane();
-        about_pane = new javax.swing.JTextPane();
+        about_text_scroller = new javax.swing.JScrollPane();
+        about_pane = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/dallaway/sloppy/messages"); // NOI18N
@@ -165,7 +170,6 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         port_label.setText(bundle.getString("prompt.port")); // NOI18N
 
-        port_textfield.setText(bundle.getString("MatisseGUI.port_textfield.text")); // NOI18N
         port_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 port_textfieldActionPerformed(evt);
@@ -205,7 +209,8 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         about_pane.setContentType("text/html"); // NOI18N
         about_pane.setEditable(false);
-        about_scroller.setViewportView(about_pane);
+        about_text_scroller.setViewportView(about_pane);
+        about_pane.getAccessibleContext().setAccessibleDescription("text/plain"); // NOI18N
 
         org.jdesktop.layout.GroupLayout about_tabLayout = new org.jdesktop.layout.GroupLayout(about_tab);
         about_tab.setLayout(about_tabLayout);
@@ -215,14 +220,14 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
                 .addContainerGap()
                 .add(about_logo)
                 .addContainerGap(316, Short.MAX_VALUE))
-            .add(about_scroller, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .add(about_text_scroller, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         about_tabLayout.setVerticalGroup(
             about_tabLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(about_tabLayout.createSequentialGroup()
                 .add(about_logo)
                 .add(18, 18, 18)
-                .add(about_scroller, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                .add(about_text_scroller, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
         );
 
         tabs.addTab(bundle.getString("tab.about.title"), about_tab); // NOI18N
@@ -267,9 +272,9 @@ private void aboutSelected(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_abo
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel about_logo;
-    private javax.swing.JTextPane about_pane;
-    private javax.swing.JScrollPane about_scroller;
+    private javax.swing.JEditorPane about_pane;
     private javax.swing.JPanel about_tab;
+    private javax.swing.JScrollPane about_text_scroller;
     private javax.swing.JLabel address_label;
     private javax.swing.JButton apply_button;
     private javax.swing.JLabel connection_speed_label;
