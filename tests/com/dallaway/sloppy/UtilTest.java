@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -19,44 +19,31 @@
  */
 package com.dallaway.sloppy;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 /**
- * Test of the bandwidth class.
+ * Test the utility methods.
  * 
  * @author $Author:dallaway $
  * @version $Revision:12 $ $Date:2007-05-26 17:45:22 +0100 (Sat, 26 May 2007) $
  */
-public class TestBandwidth 
+public class UtilTest
 {
 
-	/**
-	 * Test of the 28.8k bandwidth object.
-	 */
-	@Test public void test28()
-	{
-		Bandwidth bw = new Bandwidth(28.8f);
-		
-		assertEquals("Wrong title", "28.8k", bw.toString());
-		
-		int expect = (int)Math.round( ((28.8 * 1024.0) / 8.0f) * 7.0/8.0f );
-		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
-	}
+    /**
+     * Test of the helper used to clean up URLs entered
+     * by end users.
+     */
+    @Test
+    public void testURLCleanUP()
+    {
+        // A valid URL
+        assertEquals("http://www.newscientist.com/", Util.clean("http://www.newscientist.com/").toExternalForm());
 
-	/**
-	 * Test of the 512k bandwidth object.
-	 */
-	@Test public void test512()
-	{
-		Bandwidth bw = new Bandwidth(512.0f);
-		
-		assertEquals("Wrong title", "512k", bw.toString());
-		
-		int expect = (int)Math.round( ((512.0f * 1024.0) / 8.0f) * 7.0/8.0f );
-		assertEquals("Wrong bytes", expect, bw.getBytesPerSecond());		
-	}
+        // Missing the protocol
+        assertEquals("http://newscientist.com", Util.clean("newscientist.com").toExternalForm());
 
-
-	
+    }
 }

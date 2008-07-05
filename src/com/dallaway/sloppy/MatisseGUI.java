@@ -47,6 +47,8 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         this.conf = conf;
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource(ICON16)).getImage());
+         
+        
     }
 
     /** This method is called from within the constructor to
@@ -101,7 +103,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
             }
         });
 
-        connection_speed_options.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        connection_speed_options.setModel(new BandwidthList(conf.getBytesPerSecond()));
         connection_speed_options.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connection_speed_optionsActionPerformed(evt);
