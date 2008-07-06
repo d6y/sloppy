@@ -48,11 +48,24 @@ public class BandwidthList extends AbstractListModel implements ComboBoxModel
     public BandwidthList(final int desired_bytes_per_second)
     {
               
-        float[] kiloBitesPerSecond = {9.6f, 14.4f, 28.8f, 56f, 128f, 256f, 512f};
+        float[] kiloBitesPerSecond =  { 
+            9.6f,   14.4f,   28.8f,   43f,   56f,  80f, 
+            128f,  236f,  256f,  
+            512f,   768f,    1536f,    3072f 
+        };
 
-        for(float kbps : kiloBitesPerSecond)
+        String[] label = {
+            "9.6k", "14.4k", "28.8k", "43.2k (HSCSD)", "56k",  "80k (GPRS)",  
+            "128k",  "236k (EDGE)", "256k",
+            "512k", "768k",  "1.5Mb", "3Mb"
+        };
+        
+        assert label.length == kiloBitesPerSecond.length;
+        
+        
+        for(int i=0, n=kiloBitesPerSecond.length; i<n; i++)
         {
-            options.add( new Bandwidth(kbps) );
+            options.add( new Bandwidth(kiloBitesPerSecond[i], label[i]) );
         }
         
         

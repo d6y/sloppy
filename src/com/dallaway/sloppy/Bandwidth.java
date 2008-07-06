@@ -37,15 +37,26 @@ public class Bandwidth
     /** The maximum bytes per second for this bandwidth setting. */
     private final int bytesPerSecond;
     
-    /**
-     * Construct a new bandwidth setting.
-     * 
-     * @param	kiloBitsPerSecond	Kilobits per second.
-     */
-    public Bandwidth(final float kiloBitsPerSecond)
+    /** For formatting labels automaticallty. */
+    private static final NumberFormat nf = NumberFormat.getInstance();
+    
+    static 
     {
-
-        /*
+        nf.setMinimumFractionDigits(0);
+        nf.setMaximumFractionDigits(1);
+    }
+        
+    
+    
+    /**
+     * Create a new container for bandwidth settings.
+     * 
+     * @param kiloBitsPerSecond the kbps value (e.g., 28.8).
+     * @param label the label to show the user (e.g., "28.8k").
+     */
+    public Bandwidth(final float kiloBitsPerSecond, final String label)
+    {
+       /*
          * Convert Kb into KBs
          * 
          * Here's the thinking:
@@ -53,20 +64,34 @@ public class Bandwidth
          * 	29491.2 / 8 = 3686.4 bytes per second
          *  Take just 7/8ths of that to allow for control bits
          *    3686.4 * 7/8 = 3225.6 bytes per second
+         * 
+         * NOTE: this is certainly not a good assumption for modern
+         * network protocols, and we should revice this by explicitly
+         * providing the bytes per second as a constructor parameter. 
+         * 
          */
-        bytesPerSecond = Math.round(((kiloBitsPerSecond * 1024.0f) / 8.0f) * (7.0f / 8.0f));
-
-        /*
+        this.bytesPerSecond = Math.round(((kiloBitsPerSecond * 1024.0f) / 8.0f) * (7.0f / 8.0f));
+ 
+        this.label = label;
+    }
+    
+    /**
+     * Construct a new bandwidth setting, computing the label from the given
+     * value.
+     *
+     * @param	kiloBitsPerSecond	Kilobits per second.
+     */
+    public Bandwidth(final float kiloBitsPerSecond)
+    {
+         /*
          * Turn the KB into a label for the user to select.
          * 
          * 512.0 KB -> "512k"
          * 28.8KB -> "28.8k"
          */
-
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumFractionDigits(0);
-        nf.setMaximumFractionDigits(1);
-        this.label = nf.format(kiloBitsPerSecond) + "k";
+        this(kiloBitsPerSecond, nf.format(kiloBitsPerSecond) + "k");
+        
+     
     }
 
     /**
