@@ -22,6 +22,7 @@ package com.dallaway.sloppy;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -52,7 +53,7 @@ public class Sloppy
     public static void main(final String[] args)
     {
         // Useful for testing different languages
-        // Locale.setDefault(new Locale("bg"));
+        //Locale.setDefault(new Locale("bg"));
 
 
         /*

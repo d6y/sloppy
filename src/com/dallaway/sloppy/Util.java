@@ -64,4 +64,19 @@ public class Util
 
         return toRet;
     }
+    
+    
+    /**
+     * Construct a localhost URL which will proxy the user's desitnation URL.
+     * 
+     * @return	 if the browser was opened; false if there was
+     * 			any problem such as the JNLP service not available.
+     * 
+     */
+    public static String makeLocalURL(final int local_port, final URL destination) 
+    {
+        return "http://127.0.0.1:" + local_port + destination.getFile(); //$NON-NLS-1$
+    }
+    
+    
 }

@@ -19,12 +19,19 @@
  */
 package com.dallaway.sloppy;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.net.MalformedURLException;
 import java.net.URL;
 import javax.jnlp.BasicService;
 import javax.jnlp.ServiceManager;
 import javax.jnlp.UnavailableServiceException;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -54,9 +61,14 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         String icon16 = "/com/dallaway/sloppy/resources/sloppy_16.png"; //$NON-NLS-1$
         setIconImage(new ImageIcon(getClass().getResource(icon16)).getImage());
         
+        // Set the destination URL
+        url_textfield.setText(  conf.getDestination() != null ? conf.getDestination().toExternalForm() : "http://"  );
+        
         // Set the focus on the URL, with the cursor at the end of the address:
         url_textfield.setCaretPosition(url_textfield.getText().length());
         url_textfield.requestFocus(); 
+        
+        // port_textfield and about_textfield are set up in initComponents()
         
     }
 
@@ -178,6 +190,11 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
         });
 
         apply_button.setText(bundle.getString("button.apply")); // NOI18N
+        apply_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                apply_buttonActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout options_tabLayout = new org.jdesktop.layout.GroupLayout(options_tab);
         options_tab.setLayout(options_tabLayout);
@@ -251,16 +268,93 @@ private void url_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 // TODO add your handling code here:
 }//GEN-LAST:event_url_textfieldActionPerformed
 
+    /**
+     * Validate the desitnation URL
+     * 
+     * @return true if a good URL was set; false otherwise.
+     */
+    private boolean validateDestination()
+    {
+        final String url = url_textfield.getText();
+
+        if (url == null)
+        {
+            error(Messages.getString("error.noAddress")); //$NON-NLS-1$
+            return false;
+        }
+
+        // Get the URL entered by the user, and clean it up if required:       
+        final URL destination = Util.clean(url);
+
+        if (destination == null)
+        {
+            // The destination can't be parsed as a good URL
+            error(Messages.getString("error.badAddress")); //$NON-NLS-1$
+            return false;
+        }
+
+        // The URL is good, so set it in the configuration, and in case clean()
+        // changed the URL, we update the textbox:
+        conf.setDestination(destination);
+        url_textfield.setText(destination.toExternalForm());
+
+        
+        return true;
+    }
+
 private void go_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_go_buttonActionPerformed
-// TODO add your handling code here:
+    
+   
+    // Check for a good URL from the user.
+    if (validateDestination() == false)
+    {
+        return; // No good URL, so don't start the browser
+    }
+
+     // Save the current settings:
+    conf.saveMuffins();
+    
+    // Make sure the server code is running:
+    if (conf.getServer().isRunning() == false)
+    {
+        error(Messages.getString("error.noRunning")); //$NON-NLS-1$
+        return;
+    }
+
+    // Open the browser:
+    String local_url = Util.makeLocalURL(conf.getLocalPort(), conf.getDestination());
+    try
+    {
+        if (!showDocument(new URL(local_url)))
+        {
+             error(Messages.getString("error.cannotLaunchBrowser")); //$NON-NLS-1$
+        }
+    }
+    catch (MalformedURLException mx)
+    {
+        // We are here if the new URL(local_url) call failed 
+        // This, of course, "Will Never Happen".
+        error(Messages.getString("error.openBrowserFailed") + local_url); //$NON-NLS-1$
+    }
+   
+    
 }//GEN-LAST:event_go_buttonActionPerformed
 
+/**
+ * The user change connection speed, so we need to record that in the 
+ * Configuration instance.
+ * @param evt the action event.
+ */
 private void connection_speed_optionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connection_speed_optionsActionPerformed
-// TODO add your handling code here:
+
+    conf.setBytesPerSecond( ((Bandwidth)(connection_speed_options.getSelectedItem())).getBytesPerSecond() );
 }//GEN-LAST:event_connection_speed_optionsActionPerformed
 
+
 private void port_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_port_textfieldActionPerformed
-// TODO add your handling code here:
+    
+    
+    
 }//GEN-LAST:event_port_textfieldActionPerformed
 
 /** Update the "about text" when the tab is selected. */
@@ -268,6 +362,67 @@ private void aboutSelected(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_abo
     about_pane.setText(new AboutText(conf, (Bandwidth)(connection_speed_options.getSelectedItem())).toString());
     about_pane.setCaretPosition(0);
 }//GEN-LAST:event_aboutSelected
+
+private void apply_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apply_buttonActionPerformed
+
+    if (port_textfield.getText() == null)
+    {
+        error(Messages.getString("error.noPort")); //$NON-NLS-1$
+        return;
+    }
+    
+    final int value;
+    try
+    {
+        value = Integer.parseInt(port_textfield.getText());
+       
+    }
+    catch (NumberFormatException nfx)
+    {
+        error(Messages.getString("error.badPort")); //$NON-NLS-1$
+        return;
+    }
+    
+ 
+    // Has the port number changed?
+    if (value == conf.getLocalPort())
+    {
+        // No change; nothing to do
+        return;
+    }
+
+    conf.setLocalPort(value);
+    conf.saveMuffins();
+    
+
+     // If we get here, we need to restart the listener/server.
+    
+    JDialog progress = new JDialog(this, Messages.getString("info.wait"), false); //$NON-NLS-1$
+    progress.getContentPane().setLayout(new GridBagLayout());
+    JPanel panel = new JPanel(new GridBagLayout());
+    progress.getContentPane().add(panel);
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(5, 5, 5, 5);
+    gbc.anchor = GridBagConstraints.CENTER;
+    panel.add(new JLabel(Messages.getString("info.restarting")), gbc); //$NON-NLS-1$
+    progress.setSize(100, 50);
+    progress.setLocationRelativeTo(this);
+    progress.pack();
+    progress.setVisible(true);
+
+    debug("Stopping"); //$NON-NLS-1$
+    conf.getServer().stop();
+
+    debug("Starting"); //$NON-NLS-1$
+    conf.setLocalPort(value);
+    Thread thread = new Thread(conf.getServer());
+    thread.start();
+
+    debug("Disposing of please wait message");				 //$NON-NLS-1$
+    progress.setVisible(false);
+    progress.dispose();
+
+}//GEN-LAST:event_apply_buttonActionPerformed
 
   
 

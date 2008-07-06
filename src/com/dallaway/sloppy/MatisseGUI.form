@@ -224,6 +224,9 @@
                   <ResourceString bundle="com/dallaway/sloppy/messages.properties" key="button.apply" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="apply_buttonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
