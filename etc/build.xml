@@ -1,10 +1,24 @@
+<!--
 
+    Ant build script for Sloppy.  To make a release, run with:
+    
+    ant -f etc/build.xml -Dkey.alias=key-store-alias -Dkey.password=password
+
+-->
 <project name="sloppy" default="release" basedir="../">
 
 <target name="init" description="Set up properties for the build">
-	<property description="Path to the Jar containing JNLP" 
-		name="jnlp.lib" 
-		value="/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/javaws.jar" />
+    <property 
+        description="Path to the JAR containing JNLP" 
+	name="jnlp.lib" 
+	value="/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/javaws.jar" />
+        
+    <property 
+        description="Path to the Netbeans Swing JAR" 
+	name="matisse.lib" 
+	value="lib/swing-layout-1.0.3.jar" />
+        
+        
 </target>
 	
 <!-- Build a new release of Sloppy -->
@@ -19,13 +33,16 @@
 	
 	<!-- Incremement the build number -->
 	<propertyfile
-    	file="${build.file}"
-    	comment="Sloppy build number" >
+            file="${build.file}"
+            comment="Sloppy build number" >
 		<entry key="build.number" default="1" type="int" operation="+"/>
 	</propertyfile>
 	
 	<!-- Read the build number -->
 	<property file="${build.file}"/>
+        
+        <delete dir="bin"/>
+        <mkdir dir="bin"/>
 	
 	<javac
 		srcdir="src"
@@ -34,6 +51,7 @@
 		
 		<classpath>
 			<pathelement location="${jnlp.lib}" />
+                        <pathelement location="${matisse.lib}" />
 		</classpath>
 		
 	</javac>
@@ -47,9 +65,10 @@
 
 	<delete file="sloppy.jar"/>
 	
-	<!-- Build the Jar, using the build.properties from the src
+	<!-- Build the JAR using the build.properties from the src
 	     folder not the binary folder, because if there is one
-	     in the bin folder it'll probably out of date -->
+	     in the bin folder (e.g., via the IDE automatically copying
+             it for you) it may be out of date. -->
 	<jar 
 		jarfile="sloppy.jar" 
 		basedir="bin/" 
@@ -57,8 +76,9 @@
 		excludes="com/dallaway/sloppy/resources/build.properties">
 		
 		<fileset dir="." includes="license.txt,graphics_license.txt"/>
-		<fileset dir="src" includes="com/dallaway/sloppy/resources/build.properties"/>
-
+		<fileset dir="src" includes="com/dallaway/sloppy/resources/**"/>
+                <fileset dir="src" includes="**/messages*.properties"/>
+                
 	</jar>	
 
 </target>
@@ -78,13 +98,14 @@
 		>
 		<classpath>
 			<pathelement location="${jnlp.lib}" />
+                        <pathelement location="${matisse.lib}" />
 		</classpath>
 	</javadoc>
 
 
 </target>
 
-<!-- Create a jar containing the source code -->
+<!-- Create a JAR containing the source code -->
 <target name="src" depends="javadoc">
 
 	<delete file="src.jar"/>
@@ -98,7 +119,7 @@
 </target>
 
 <!-- Sign the JAR -->
-<target name="sign">
+<target name="sign" depends="init">
 	<signjar keystore="keystore"
 		jar="sloppy.jar" alias="${key.alias}" storepass="${key.password}"/>
 </target>

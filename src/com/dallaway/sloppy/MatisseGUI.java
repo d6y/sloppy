@@ -111,7 +111,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         address_label.setText(bundle.getString("prompt.enterUrl")); // NOI18N
 
-        url_textfield.setText("http://");
+        url_textfield.setText(bundle.getString("MatisseGUI.url_textfield.text")); // NOI18N
         url_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 url_textfieldActionPerformed(evt);
@@ -460,7 +460,7 @@ private void apply_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     }
     
     /**
-     * @see UserInterface#debug(String
+     * @see UserInterface#debug(java.lang.String) 
      */
     public void debug(String message)
     {

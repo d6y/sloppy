@@ -22,7 +22,8 @@
   </information>
   <resources>
     <j2se version="1.5+" java-vm-args="-showversion" />
-    <jar href="sloppy.jar" main="true" />
+    <jar href="sloppy.jar" main="true" download="eager" />
+     <extension name="Swing Layout" href="swing-layout.jnlp"/> 
   </resources>
   <application-desc main-class="com.dallaway.sloppy.Sloppy" />
   <security>

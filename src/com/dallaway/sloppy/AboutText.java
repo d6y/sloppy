@@ -48,6 +48,14 @@ public class AboutText
         about.append("<p><b>").append(release.getRelease()).append("</b></p>"); //$NON-NLS-1$ //$NON-NLS-2$
         about.append("<p>").append(release.getCopyright()).append("</p>");				 //$NON-NLS-1$ //$NON-NLS-2$
 
+        // credit the authors:
+        about.append("<p>"); //$NON-NLS-1$
+        about.append(Messages.getString("credit.software")); //$NON-NLS-1$ 
+        about.append(" "); //$NON-NLS-1$
+        about.append(Messages.getString("credit.softwareNames")); //$NON-NLS-1$ 
+        about.append("</p>"); //$NON-NLS-1$ 
+      
+        
         // credit the logo creation:
         about.append("<p>"); //$NON-NLS-1$ 
         about.append(Messages.getString("credit.artwork")); //$NON-NLS-1$ 

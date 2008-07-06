@@ -43,7 +43,7 @@ public class BandwidthList extends AbstractListModel implements ComboBoxModel
      * Construct a new list of bandwith options, selecting the one that matches
      * the supplied kbps value.
      * 
-     * @param selected_kbps the value to be selected (e.g., 
+     * @param desired_bytes_per_second the value to be selected.
      */
     public BandwidthList(final int desired_bytes_per_second)
     {

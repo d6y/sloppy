@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://www.dallaway.com/sloppy" href="swing-layout.jnlp">
+    <information>
+        <title>Swing Layout</title>
+        <vendor>Sun Microsystems, Inc.</vendor>
+    </information>
+    <resources>
+       <jar href="lib/swing-layout-1.0.3.jar" eager="true" />
+    </resources>
+   <component-desc/>
+</jnlp>
