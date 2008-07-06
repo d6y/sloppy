@@ -287,6 +287,9 @@
                   <AccessibilityProperties>
                     <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value="text/plain" noResource="true"/>
                   </AccessibilityProperties>
+                  <Events>
+                    <EventHandler event="hyperlinkUpdate" listener="javax.swing.event.HyperlinkListener" parameters="javax.swing.event.HyperlinkEvent" handler="onLinkClick"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

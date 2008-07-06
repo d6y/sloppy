@@ -41,7 +41,7 @@ import javax.swing.event.HyperlinkListener;
  * @author $Author: dallaway $
  * @version $Revision: 24 $ $Date: 2007-05-29 10:33:11 +0100 (Tue, 29 May 2007) $
  */
-public class MatisseGUI extends javax.swing.JFrame implements UserInterface, HyperlinkListener
+public class MatisseGUI extends javax.swing.JFrame implements UserInterface
 {
 
     
@@ -227,6 +227,11 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface, Hyp
 
         about_pane.setContentType("text/html"); // NOI18N
         about_pane.setEditable(false);
+        about_pane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
+            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
+                onLinkClick(evt);
+            }
+        });
         about_text_scroller.setViewportView(about_pane);
         about_pane.getAccessibleContext().setAccessibleDescription("text/plain"); // NOI18N
 
@@ -424,6 +429,19 @@ private void apply_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
 }//GEN-LAST:event_apply_buttonActionPerformed
 
+/**
+ * For handling links in the "About" box.
+ * 
+ * @see javax.swing.event.HyperlinkListener#hyperlinkUpdate(HyperlinkEvent)
+*/
+private void onLinkClick(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_onLinkClick
+    if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+    {
+            showDocument(evt.getURL());
+    }
+  
+}//GEN-LAST:event_onLinkClick
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -511,18 +529,7 @@ private void apply_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     
     
     
-    /**
-     * For handling links in the "About" box.
-     * 
-     * @see javax.swing.event.HyperlinkListener#hyperlinkUpdate(HyperlinkEvent)
-     */
-    public void hyperlinkUpdate(HyperlinkEvent event)
-    {
-        if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-        {
-            showDocument(event.getURL());
-	}
-    }
+   
 
     /**
      * Open the user's browser at the given URL.
