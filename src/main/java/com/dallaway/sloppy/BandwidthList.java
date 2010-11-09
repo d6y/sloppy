@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2008-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -26,9 +26,6 @@ import javax.swing.ComboBoxModel;
 
 /**
  * Conntainer for the list of {@link Bandwidth} options.
- * 
- * @author $Author: dallaway $
- * @version $Revison$ $Date: 2007-05-26 17:47:58 +0100 (Sat, 26 May 2007) $
  */
 public class BandwidthList extends AbstractListModel implements ComboBoxModel
 {

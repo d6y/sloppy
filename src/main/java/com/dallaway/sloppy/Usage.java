@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -32,27 +32,23 @@ package com.dallaway.sloppy;
  * is doing nothing, bytes is constant and total time increases
  * until they have effectively unlimited bandwidth.  So we reset
  * bytes and total time if the user goes quite for 5 seconds or longer.
- * 
- * @author		$Author$
- * @version	$Revision$ $Date$
+
  */
 public class Usage
 {
 
-	/** Time stamp of the first request. */  
+	// Time stamp of the first request.   
 	private long startTime = -1; 
 
-	/** Total bytes exchanged since the start time. */
+	// Total bytes exchanged since the start time. 
 	private int totalBytes = 0;  
 
-	/** The last time mark() was called. */
+	// The last time mark() was called. 
 	private long lastMark = -1; 
 
-	/** 
-	 * Number of milliseconds between requests until we 
-	 * considerour data to be stale.
-	 */
- 	private static final long MIN_MARK_INTERVAL = 1000L * 5;
+	
+	// Number of milliseconds between requests until we  considerour data to be stale.
+	private static final long MIN_MARK_INTERVAL = 1000L * 5;
 
 
   /**

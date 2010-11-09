@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -30,18 +30,16 @@ import java.util.Date;
 
  * End user events are date stamped.
  * Notices, errors and debugging lines start with a hash (#).
- * 
- * @author		$Author$
- * @version	$Revision$ $Date$
+
  */
 public class ConsoleLogger implements UserInterface
 {
   private static final long serialVersionUID = -3589118475573004267L;
 
-  /** Date to be formated as a common log format. */
+  // Date to be formated as a common log format. 
   private SimpleDateFormat sdf = new SimpleDateFormat("[dd/MMM/yyyy HH:mm:ss zzzz]");
 
-  /** Set to true for debugging information. */
+  // Set to true for debugging information. 
   private boolean debug = false;
 
   

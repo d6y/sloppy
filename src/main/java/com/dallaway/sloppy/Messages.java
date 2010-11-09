@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
  */
 public class Messages
 {
-    private static final String BUNDLE_NAME = "com.dallaway.sloppy.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -26,9 +26,6 @@ import java.util.Properties;
 
 /**
  * The sloppy project release information.
- * 
- * @author	$Author$
- * @version $Revision$ $Date$
  */
 public class ReleaseInfo
 {
@@ -49,7 +46,7 @@ public class ReleaseInfo
 		Properties props = new Properties();
 		try
 		{
-			InputStream in = getClass().getResourceAsStream("/com/dallaway/sloppy/resources/build.properties"); //$NON-NLS-1$
+			InputStream in = getClass().getResourceAsStream("/build.properties"); //$NON-NLS-1$
 			if (in != null)
 			{
 				props.load(in);

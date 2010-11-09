@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- http://java.sun.com/j2se/1.5.0/docs/guide/javaws/developersguide/syntax.html -->
 <jnlp 
 	spec="1.0+"   
-	codebase="file:///Users/richard/Developer/workspace/spiralarm/sloppy" 
+	codebase="file:///Users/richard/Developer/sloppy/sloppy" 
 	href="local.jnlp">
   <information>
     <title>Sloppy</title>
@@ -15,9 +14,9 @@
     <description locale="bg">Sloppy позволява да симулирате различни скорости на dial-up връзка.</description>
     <description kind="short" locale="bg">Sloppy симулира dial-up скорости</description>
 
-    <icon href="src/com/dallaway/sloppy/resources/sloppy_logo.png" width="133" height="134"/>
-    <icon href="src/com/dallaway/sloppy/resources/sloppy_32.gif" width="32" height="32"/>
-    <icon href="src/com/dallaway/sloppy/resources/sloppy_16.gif" width="16" height="16"/>
+    <icon href="sloppy_logo.png" width="133" height="134"/>
+    <icon href="sloppy_32.gif" width="32" height="32"/>
+    <icon href="sloppy_16.gif" width="16" height="16"/>
     <offline-allowed />
   </information>
   <resources>

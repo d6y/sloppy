@@ -8,50 +8,39 @@
 <project name="sloppy" default="release" basedir="../">
 
 <target name="init" description="Set up properties for the build">
-    <property 
-        description="Path to the JAR containing JNLP" 
-	name="jnlp.lib" 
-	value="/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/lib/javaws.jar" />
+    <property description="Path to the JAR containing JNLP"  name="jnlp.lib" 
+		value="/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/lib/javaws.jar" />
         
-    <property 
-        description="Path to the Netbeans Swing JAR" 
-	name="matisse.lib" 
-	value="lib/swing-layout-1.0.3.jar" />
-        
-        
-</target>
+	<property description="Path to the Netbeans Swing JAR" name="matisse.lib" value="lib/swing-layout-1.0.3.jar" />
+ </target>
 	
-<!-- Build a new release of Sloppy -->
 <target name="release" depends="compile,jar,sign,src" />
 
-<!-- Increment the build number and compile the source code -->
 <target name="compile" depends="init">
 
 	<tstamp/>
 	
-	<property name="build.file" value="src/com/dallaway/sloppy/resources/build.properties" />
+	<property name="build.file" value="src/main/resources/build.properties" />
 	
-	<!-- Incremement the build number -->
-	<propertyfile
-            file="${build.file}"
-            comment="Sloppy build number" >
+	<!-- Increment the build number -->
+	<propertyfile file="${build.file}" comment="Sloppy build number" >
 		<entry key="build.number" default="1" type="int" operation="+"/>
 	</propertyfile>
 	
 	<!-- Read the build number -->
 	<property file="${build.file}"/>
         
-        <delete dir="bin"/>
-        <mkdir dir="bin"/>
+	<delete dir="bin"/>
+	<mkdir dir="bin"/>
 	
 	<javac
-		srcdir="src"
+		srcdir="src/main/java"
 		destdir="bin" 
-		deprecation="true" >
+		deprecation="true" includeantruntime="false" >
 		
 		<classpath>
 			<pathelement location="${jnlp.lib}" />
-                        <pathelement location="${matisse.lib}" />
+			<pathelement location="${matisse.lib}" />
 		</classpath>
 		
 	</javac>
@@ -60,7 +49,6 @@
 
 </target>
 
-<!-- Construct a JAR containng Sloppy -->
 <target name="jar">
 
 	<delete file="sloppy.jar"/>
@@ -68,37 +56,32 @@
 	<!-- Build the JAR using the build.properties from the src
 	     folder not the binary folder, because if there is one
 	     in the bin folder (e.g., via the IDE automatically copying
-             it for you) it may be out of date. -->
+         it for you) it may be out of date. -->
 	<jar 
 		jarfile="sloppy.jar" 
 		basedir="bin/" 
 		manifest="etc/manifest" 
 		excludes="com/dallaway/sloppy/resources/build.properties">
-		
 		<fileset dir="." includes="license.txt,graphics_license.txt"/>
-		<fileset dir="src" includes="com/dallaway/sloppy/resources/**"/>
-                <fileset dir="src" includes="**/messages*.properties"/>
-                
+		<fileset dir="src/main/resources" includes="**"/>
 	</jar>	
 
 </target>
 
 
-<!-- Build the javadoc -->
 <target name="javadoc">
 
 	<mkdir dir="apidoc"/>
 	
 	<javadoc
-		sourcepath="src"
+		sourcepath="src/main/java"
 		destdir="apidoc"		
 		packagenames="com.dallaway.sloppy.*"
-		author="true"
-		version="true"
-		>
+		author="false"
+		version="false">
 		<classpath>
 			<pathelement location="${jnlp.lib}" />
-                        <pathelement location="${matisse.lib}" />
+			<pathelement location="${matisse.lib}" />
 		</classpath>
 	</javadoc>
 
@@ -110,18 +93,15 @@
 
 	<delete file="src.jar"/>
 	
-	<jar 
-		jarfile="src.jar">
-		<fileset dir="." includes="src/**,apidoc/**,license.txt,graphics_license.txt"/>
-		
+	<jar jarfile="src.jar">
+		<fileset dir="." includes="src/main/java/**,apidoc/**,license.txt,graphics_license.txt"/>	
 	</jar>	
 
 </target>
 
-<!-- Sign the JAR -->
+
 <target name="sign" depends="init">
-	<signjar keystore="keystore"
-		jar="sloppy.jar" alias="${key.alias}" storepass="${key.password}"/>
+	<signjar keystore="keystore" jar="sloppy.jar" alias="${key.alias}" storepass="${key.password}"/>
 </target>
 
 </project>

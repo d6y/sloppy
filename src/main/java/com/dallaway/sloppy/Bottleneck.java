@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -33,23 +33,20 @@ import java.util.HashMap;
  * We need to do this because a browser may request multiple files at the same
  * time, and we want to limit overall bandwidth, not just the bandwidth
  * used on each request.
- * 
- * @author		$Author$
- * @version	$Revision$ $Date$
  */
 public class Bottleneck
 {
 
-  /** Hash to Usage objects, keyed by clientId. */
+  // Hash to Usage objects, keyed by clientId. 
   private final static HashMap<String,Usage> clients = new HashMap<String, Usage>();
 
-  /** This client's id (e.g., IP Address). */
+  // This client's id (e.g., IP Address). 
   private String clientId = null;
 
-  /** Bandwidth usage. */
+  // Bandwidth usage. 
   private Usage usage = null;
 
-  /** The configuration, so we can see the bandwidth limit. */
+  // The configuration, so we can see the bandwidth limit. 
   private Configuration conf;
 
   /**

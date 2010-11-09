@@ -37,15 +37,9 @@ import javax.swing.event.HyperlinkListener;
 
 /**
  * Implementation of a graphical front end for Sloppy.
- * 
- * @author $Author: dallaway $
- * @version $Revision: 24 $ $Date: 2007-05-29 10:33:11 +0100 (Tue, 29 May 2007) $
  */
 public class MatisseGUI extends javax.swing.JFrame implements UserInterface
 {
-
-    
-
     private final Configuration conf;
     
     /** Create the GUI
@@ -58,7 +52,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface
         initComponents();
         
         // Provide an icon for the window:
-        String icon16 = "/com/dallaway/sloppy/resources/sloppy_16.png"; //$NON-NLS-1$
+        String icon16 = "/sloppy_16.png"; //$NON-NLS-1$
         setIconImage(new ImageIcon(getClass().getResource(icon16)).getImage());
         
         // Set the destination URL
@@ -99,7 +93,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface
         about_pane = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("com/dallaway/sloppy/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("messages"); // NOI18N
         setTitle(bundle.getString("name")); // NOI18N
         setName("main_frame"); // NOI18N
 
@@ -122,7 +116,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface
 
         go_label.setText(bundle.getString("prompt.launch")); // NOI18N
 
-        go_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/dallaway/sloppy/resources/play16x16.gif"))); // NOI18N
+        go_button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/play16x16.gif"))); // NOI18N
         go_button.setText(bundle.getString("button.launch")); // NOI18N
         go_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,7 +217,7 @@ public class MatisseGUI extends javax.swing.JFrame implements UserInterface
 
         tabs.addTab(bundle.getString("tab.options.title"), options_tab); // NOI18N
 
-        about_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/dallaway/sloppy/resources/sloppy_logo64.png"))); // NOI18N
+        about_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sloppy_logo64.png"))); // NOI18N
 
         about_pane.setContentType("text/html"); // NOI18N
         about_pane.setEditable(false);

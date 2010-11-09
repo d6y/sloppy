@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -27,17 +27,14 @@ import java.util.Properties;
 
 /**
  * Main entry point for starting Sloppy.
- * 
- * @author $Author$
- * @version $Revision$ $Date$
  */
 public class Sloppy
 {
 
-    /** By default start the GUI. */
+    // By default start the GUI. 
     private static boolean startGUI = true;
     
-    /** Do we want debug output? */
+    // Do we want debug output? 
     private static boolean debug = false;
 
     /**

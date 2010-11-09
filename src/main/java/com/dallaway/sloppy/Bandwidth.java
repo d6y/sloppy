@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -24,20 +24,17 @@ import java.text.NumberFormat;
 /**
  * Conntainer for information about a particular bandwidth setting: i.e.,
  * a label such as "28.8k" and a corresponding bytes-per-second measure.
- * 
- * @author $Author$
- * @version $Revison$ $Date$
  */
 public class Bandwidth
 {
 
-    /** The label shown to the user for this bandwidth setting. */
+    // The label shown to the user for this bandwidth setting.
     private final String label;
     
-    /** The maximum bytes per second for this bandwidth setting. */
+    // The maximum bytes per second for this bandwidth setting.
     private final int bytesPerSecond;
     
-    /** For formatting labels automaticallty. */
+    // For formatting labels automaticallty.
     private static final NumberFormat nf = NumberFormat.getInstance();
     
     static 

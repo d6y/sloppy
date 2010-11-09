@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -28,9 +28,6 @@ import java.io.Serializable;
  * Note that this interface will change for internationalization;
  * in particular the messages are likely to become keys for
  * lookup of the appropriate message.
- * 
- * @author	$Author$
- * @version $Revision$ $Date$
  */
 public interface UserInterface extends Serializable
 {

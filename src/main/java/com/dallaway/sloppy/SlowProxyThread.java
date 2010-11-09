@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2007 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -47,26 +47,22 @@ import java.net.URL;
  * (e.g., GIFs) as separate requests.  To maintain a coherent bandwidth bottleneck
  * we have to record the total bytes sent to a particular client.  This means we
  * need to identify a client.  We use IP address to do this.
- *
- * 
- * @author		$Author$
- * @version $Revision$ $Date$
  */
 public class SlowProxyThread extends Thread
 {
-	/** The interface to log to. */
+	// The interface to log to. 
 	private UserInterface ui;
 	
-	/** The system configuration/settings. */
+	// The system configuration/settings. 
 	private Configuration conf;
 	
-	/** The client request. */
+	// The client request. 
 	private Socket request;
 	
-	/** Buffer size for reading data from web server. */
+	// Buffer size for reading data from web server.
 	private static final int BUFFER_SIZE = 2048;
 	
-	/** The bottleneck to limit this user to a specific number of bytes per millisecond. */
+	// The bottleneck to limit this user to a specific number of bytes per millisecond. 
 	private Bottleneck bottleneck;
 
 	

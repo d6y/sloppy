@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001-2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2001-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -41,9 +41,6 @@ import javax.jnlp.UnavailableServiceException;
  * 
  * It also knows how to save itself to disk in the JNLP
  * environment via the load and save muffins methods.
- * 
- * @author $Author$
- * @version $Revision$ $Date$
  */
 public class Configuration implements Serializable
 {
@@ -56,31 +53,31 @@ public class Configuration implements Serializable
     /** Default bandwidth to simulate */
     public static final int DEFAULT_BYTES_PER_SECOND = 3225;
     
-    /** The bandwidth we want to limit to. */
+    // The bandwidth we want to limit to. 
     private int bytesPerSecond;
     
-    /** The address we're proxying to. **/
+    // The address we're proxying to. 
     private URL destination;
     
-    /** The local port we're listening on. */
+    // The local port we're listening on. 
     private int localPort;
     
-    /** For messages back to the user, which by default will output to the console. */
+    // For messages back to the user, which by default will output to the console. 
     private UserInterface ui = new ConsoleLogger();
     
-    /** The server handling the HTTP requests. */
+    // The server handling the HTTP requests. 
     private SloppyServer server;
     
-    /** Name of the setting in the properties file for the bandwidth */
+    // Name of the setting in the properties file for the bandwidth 
     private static final String BYTES_KEY = "sloppy.bytesPerSecond"; //$NON-NLS-1$
     
-    /** The names of the property for the port to listen on. */
+    // The names of the property for the port to listen on. 
     private static final String PORT_KEY = "sloppy.listenPort"; //$NON-NLS-1$
     
-    /** The name of the property for the URL to proxy to. */
+    // The name of the property for the URL to proxy to. 
     private static final String DESTINATION_KEY = "sloppy.desintationURL"; //$NON-NLS-1$
     
-    /** Amount of space (bytes) we need in the web cache for config. */
+    // Amount of space (bytes) we need in the web cache for config. 
     private static final long MUFFIN_SIZE = 2048;
 
     /**

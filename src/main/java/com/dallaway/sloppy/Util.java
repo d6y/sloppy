@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2008-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
@@ -24,9 +24,6 @@ import java.net.URL;
 
 /**
  * Utility methods.
- * 
- * @author $Author:dallaway $
- * @version $Revision:12 $ $Date:2007-05-26 17:45:22 +0100 (Sat, 26 May 2007) $
  */
 public class Util
 {
