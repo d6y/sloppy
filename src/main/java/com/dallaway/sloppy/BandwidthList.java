@@ -25,12 +25,14 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
 /**
- * Conntainer for the list of {@link Bandwidth} options.
+ * Container for the list of {@link Bandwidth} options.
  */
 public class BandwidthList extends AbstractListModel implements ComboBoxModel
 {
 
-    // The available options:
+		private static final long serialVersionUID = -8581779445557143401L;
+
+		// The available options:
     private List<Bandwidth> options = new ArrayList<Bandwidth>();
     
     // The selected option, defaulted in the constructor:
