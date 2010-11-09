@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Richard Dallaway <richard@dallaway.com>
+ * Copyright (C) 2008-2010 Richard Dallaway <richard@dallaway.com>
  * 
  * This file is part of Sloppy.
  * 
