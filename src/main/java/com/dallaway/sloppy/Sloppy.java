@@ -21,8 +21,8 @@ package com.dallaway.sloppy;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.Authenticator;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -50,7 +50,7 @@ public class Sloppy
     public static void main(final String[] args)
     {
         // Useful for testing different languages
-        //Locale.setDefault(new Locale("bg"));
+        //java.util.Locale.setDefault(new java.util.Locale("bg"));
 
 
         /*
@@ -83,6 +83,10 @@ public class Sloppy
                 props.put("http.proxyPort", proxyPort); //$NON-NLS-1$
             }
         }
+        
+        
+        // Disable the Authentication popup dialog, as this is handled by the web browser
+        Authenticator.setDefault(null);
 
 
 
